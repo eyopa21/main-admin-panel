@@ -2,39 +2,42 @@
   <div
     class="
       flex flex-col
-      md:flex-row
       drop-shadow-md
-      border-2
-      md:m-4
-      p-4
+      md:rounded-xl
+      
+      bg-white
+      min-h-screen
+      md:min-h-full
       md:p-8
       w-full
     "
   >
-    <div class="w-full md:w-1/2">
+    <div class="w-full grid grid-cols-2 lg:grid-cols-3 md:gap-1">
       <div v-for="i in 5" :key="i">
         <ListsInvitesList />
       </div>
     </div>
-    <div class="w-full md:w-1/2 m-auto md:ml-4 pt-8 md:pt-0">
+    <div class="w-full  md:ml-4 pt-16 ">
+  
       <VueBtn
         v-if="!showForm"
         @click="showForm = true"
         name="Click here to Add new"
         type="button"
+        class="w-full flex justify-center md:justify-end"
       />
-      <form @submit.prevent="invite()">
+  
+      <form class="w-full" @submit.prevent="invite()">
         <div
           v-if="showForm"
           class="
             flex flex-col
             min-w-0
             break-words
-            bg-white
+            bg-gray-200
             w-full
             mb-6
             shadow-lg
-            rounded-2xl
             p-8
           "
         >
@@ -46,7 +49,32 @@
             rule="email"
             class="w-full"
           />
-          <VueBtn name="Invite" type="submit" class="mt-4" />
+          <div class="flex flex-row">
+            <VueBtn name="Invite" type="submit" class="mt-4" />
+            <button
+              class="
+                text-red-500
+                background-transparent
+                font-bold
+                uppercase
+                px-6
+                py-2
+                text-sm
+                outline-none
+                focus:outline-none
+                mr-1
+                mb-1
+                ease-linear
+                transition-all
+                duration-100
+                pt-6
+              "
+              type="button"
+              @click="showForm=false"
+            >
+              Close
+            </button>
+          </div>
         </div>
       </form>
     </div>

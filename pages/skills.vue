@@ -1,7 +1,5 @@
 <template>
-
   <div class="w-full">
-
     <div
       class="
         container
@@ -10,10 +8,13 @@
         md:flex-row
         mt-16
         min-h-screen min-w-full
-        pr-2
+        md:pr-2
       "
     >
-      <div class="flex flex-col w-full md:w-[40%]">
+      <div
+        :class="showAddForm || editData.editSkill ? 'hidden md:block' : ''"
+        class="flex flex-col w-full md:w-[40%]"
+      >
         <div class="ml-2 my-4 mr-4 mb-8">
           <VueInput
             placeholder="Search"
@@ -41,37 +42,46 @@
           </div>
         </div>
         <hr />
-        <div v-for="i in 8" :key="i">
-          <ListsSkillsList />
+        <div v-for="skill in skills" :key="skill">
+          <ListsSkillsList :skills="skill"/>
         </div>
       </div>
       <div class="flex-wrap w-full md:w-[60%]">
         <div class="w-full">
-          <div v-if="!showAddForm" class="m-24 block md:hidden">
+          <div
+            v-if="!showAddForm && !editData.editSkill"
+            class="m-24 block md:hidden"
+          >
             <VueBtn
-              @click="showAddForm=true"
+              @click="showAddForm = true"
               name="Click here to add new mobile"
               type="button"
             />
           </div>
-          <div v-if="!showAddForm && !editData" class="m-48 hidden md:block">
+          <div
+            v-if="!showAddForm && !editData.editSkill"
+            class="m-48 hidden md:block"
+          >
             <VueBtn
               @click="showAddForm = true"
               name="Click here to add new "
               type="button"
             />
           </div>
-          <div class="m-8 hidden md:block">
-            <FormsAddSkillsForm v-if="showAddForm && !editData" @closeAddForm="showAddForm=false"/>
-            <FormsEditForm v-if="editData" />
+
+          <div class="md:m-8">
+            <FormsAdderAddSkillsForm
+              v-if="showAddForm && !editData.editSkill"
+              @closeAddForm="showAddForm = false"
+            />
+            <NuxtPage v-if="editData.editSkill" />
+            <!--FormsEditerSkillsEditForm v-if="editData.editSkill" /-->
           </div>
         </div>
       </div>
     </div>
-  
-  <div class="block md:hidden" v-if="showAddForm"><ModalsAddModal @closeAddForm="showAddForm=false"/>
-</div>
-{{test}}
+
+    {{ test }}
   </div>
 </template>
 <script setup>
@@ -84,9 +94,32 @@ const router = useRouter();
 const editData = useEditData();
 //const showAddModal = ref(false)
 
+
+
+const skills = ref([{
+    name: 'skill1',
+    level: '50'
+},
+{
+    name: 'skill12',
+    level: '50'
+},
+{
+    name: 'skill13',
+    level: '50'
+},
+{
+    name: 'skill14',
+    level: '50'
+},
+{
+    name: 'skill15',
+    level: '50'
+}])
+
 const test = computed(() => {
-    if(editData.value && showAddForm.value){
-        showAddForm.value = false
-    }
-})
+  if (editData.value.editSkill && showAddForm.value) {
+    showAddForm.value = false;
+  }
+});
 </script>

@@ -3,7 +3,10 @@ export default function() {
         return {
             showSideBar: false,
             closeSidebar: true,
-            showModal: false
+            showModal: false,
+            showConfirm: false,
+            previewData: ''
+
         }
     })
 }

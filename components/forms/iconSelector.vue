@@ -8,7 +8,7 @@
       w-full
       mb-6
       shadow-lg
-      rounded
+      md:rounded
       p-4
     "
   >
@@ -27,7 +27,7 @@
        
         dark:border-gray-700
         w-full
-        grid grid-cols-4
+        grid grid-cols-3
         md:grid-cols-6
         gap-0
       "
@@ -38,8 +38,7 @@
         class="
           py-3
           px-4
-          border border-gray-200
-          dark:border-gray-700
+   
           border-b-0
           list-none
           rounded-sm
@@ -55,8 +54,7 @@
         class="
           py-3
           px-4
-          border border-gray-200
-          dark:border-gray-700
+ 
           border-b-0
           list-none
           rounded-sm
@@ -72,8 +70,7 @@
         class="
           py-3
           px-4
-          border border-gray-200
-          dark:border-gray-700
+         
           border-b-0
           list-none
           rounded-sm
@@ -89,8 +86,7 @@
         class="
           py-3
           px-4
-          border border-gray-200
-          dark:border-gray-700
+        
           border-b-0
           list-none
           rounded-sm
@@ -106,8 +102,7 @@
         class="
           py-3
           px-4
-          border border-gray-200
-          dark:border-gray-700
+    
           border-b-0
           list-none
           rounded-sm
@@ -123,8 +118,6 @@
         class="
           py-3
           px-4
-          border border-gray-200
-          dark:border-gray-700
           border-b-0
           list-none
           rounded-sm
@@ -140,8 +133,7 @@
         class="
           py-3
           px-4
-          border border-gray-200
-          dark:border-gray-700
+      
           border-b-0
           list-none
           rounded-sm
@@ -157,8 +149,7 @@
         class="
           py-3
           px-4
-          border border-gray-200
-          dark:border-gray-700
+     
           border-b-0
           list-none
           rounded-sm
@@ -174,8 +165,7 @@
         class="
           py-3
           px-4
-          border border-gray-200
-          dark:border-gray-700
+        
           border-b-0
           list-none
           rounded-sm
@@ -191,8 +181,7 @@
         class="
           py-3
           px-4
-          border border-gray-200
-          dark:border-gray-700
+     
           border-b-0
           list-none
           rounded-sm
@@ -208,8 +197,7 @@
         class="
           py-3
           px-4
-          border border-gray-200
-          dark:border-gray-700
+         
           border-b-0
           list-none
           rounded-sm
@@ -234,8 +222,7 @@
         class="
           py-3
           px-4
-          border border-gray-200
-          dark:border-gray-700
+         
           border-b-0
           list-none
           rounded-sm

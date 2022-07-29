@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col justify-start mt-2 z-0">
-    <div class="mb-2 flex flex-row">
-      {{ props.label }}
+    <div class="mb-2 flex flex-row font-semibold">
+      {{ props.label }}<span v-if="props.astrix">*</span>
     </div>
 
     <div class="flex flex-col items-end relative">
@@ -78,6 +78,7 @@
         />
       </div>
     </div>
+    {{changeData}}
   </div>
 </template>
 
@@ -131,14 +132,20 @@ const props = defineProps({
   rounded: {
     type: Boolean,
     required: false
+  },
+  astrix: {
+    type: Boolean,
+    default: false
   }
 });
 
 const { value, errorMessage } = useField(props.name, props.rule);
+const changeData = computed(() => {
 
-if (props.data) {
-  const data = ref(props.data);
+    if (props.data) {
+        const data = ref(props.data);
   value.value = data.value;
   emit("emit-input", data.value);
 }
+    })
 </script>

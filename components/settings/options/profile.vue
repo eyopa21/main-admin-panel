@@ -9,8 +9,9 @@
         w-full
         mb-6
         shadow-lg
-        rounded-2xl
-        
+       
+        min-h-screen
+        md:min-h-full
       "
     >
       <form @submit.prevent="update()">

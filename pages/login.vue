@@ -51,12 +51,11 @@
                 rule="password"
                 classs="w-full h-12"
               />
-           
 
               <div class="ml-1 -pt-4">
-              <NuxtLink to="/">
-                <VueBtn name="Login" type="submit" />
-              </NuxtLink>
+                <NuxtLink to="/">
+                  <VueBtn name="Login" type="submit" />
+                </NuxtLink>
               </div>
             </div>
 
@@ -73,7 +72,7 @@
                 Login via invite link
               </button>
               <button
-              type="button"
+                type="button"
                 class="
                   w-full
                   text-center
@@ -81,7 +80,7 @@
                   text-gray-500
                   hover:underline
                 "
-                 @click="layoutState.showModal = true"
+                @click="layoutState.showModal = true"
               >
                 Forgot password!
               </button>
@@ -97,11 +96,56 @@
 import { PencilAltIcon } from "@heroicons/vue/outline";
 import { AdjustmentsIcon } from "@heroicons/vue/outline";
 import { useForm } from "vee-validate";
+
+import { useQuery, useMutation } from "@vue/apollo-composable";
+import { GET_POSTS } from "../gql/test.js";
+import { gql } from "@apollo/client/core";
 const { handleSubmit } = useForm();
 const login = handleSubmit((formValues) => {
   console.log(formValues);
+ 
+  
 });
+/*
+if (process.client) {
+    const { mutate: register } = useMutation(
+      gql`
+        mutation {
+          insert_social_links(
+            objects: { name: "nn", value: "nn", icon: "nn" }
+          ) {
+            returning {
+              id
+              name
+              icon
+              updated_at
+              value
+              created_at
+            }
+          }
+        }
+      `
+    );
+    register()
+      .then((res) => {
+        console.log("res", res.data);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  }
+function test() {
+  const { loading, result, error } = useQuery(GET_POSTS);
+  watchEffect(() => {
+    if (result.value) {
+      console.log("result.value", result.value);
+    } else if (error.value) {
+      console.log("error.value", error.value);
+    }
+  });
+}
 
-
+//test();
+*/
 const layoutState = useLayout();
 </script>

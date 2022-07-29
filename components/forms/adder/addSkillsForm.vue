@@ -8,11 +8,13 @@
           break-words
           bg-white
           w-full
-          mb-6
+          md:mb-6
           shadow-lg
           rounded-2xl
           p-8
-          h-full
+       
+          h-screen
+          md:h-full
         "
       >
         <FormsIconSelector class="w-full" />

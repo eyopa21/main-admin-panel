@@ -10,22 +10,25 @@
           w-full
           mb-6
           shadow-lg
-          rounded-2xl
-          p-8
+          md:rounded-2xl
+          p-4
+          md:p-8
           h-full
+          min-h-screen
+          md:min-h-full
         "
       >
-      
+        <FormsIconSelector class="w-full" />
         <VueInput
           type="text"
-          placeholder="Skill Name"
-          name="Skill Name"
+          placeholder="Social Link Name"
+          name="Link Name"
           rule="required"
         />
         <VueInput
           type="text"
-          placeholder="Level"
-          name="Level"
+          placeholder="Value"
+          name="Value"
           rule="required"
         />
 

@@ -3,8 +3,8 @@
     class="container md:pl-24 flex flex-wrap mt-16 min-h-screen min-w-full pr-2"
   >
     <div class="w-full">
-      <ul class="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row justify-start w-full ml-1">
-        <li class="-mb-px mr-2 flex-auto text-center">
+      <ul class="flex mb-0 md:w-1/2 list-none flex-wrap pt-3 pb-4 flex-row justify-start w-full ml-1">
+        <li class=" mr-2 flex-auto text-center">
           <a
             class="
               text-xs
@@ -16,6 +16,7 @@
               rounded
               block
               leading-normal
+              
             "
             @click="toggleTabs(1)"
             :class="{
@@ -78,7 +79,7 @@
       </ul>
       <div>
       <hr>
-        <div class="px-4 py-5 flex-auto">
+        <div class="md:px-4 md:py-5 flex-auto">
           <div class="tab-content tab-space">
             <div :class="{ hidden: openTab !== 1, block: openTab === 1 }">
               <SettingsGeneral />
@@ -87,7 +88,8 @@
               <SettingsSocialLinks />
             </div>
             <div :class="{ hidden: openTab !== 3, block: openTab === 3 }">
-              <SettingsPreferences />
+            
+              <NuxtPage/>
             </div>
            
           </div>

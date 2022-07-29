@@ -10,7 +10,12 @@ export default defineNuxtConfig({
           },
         },
       },
+      transpile: [
+        '@apollo/client',
+        'ts-invariant/process',
+      ],
     },
+    
   
     css: [
       "~/assets/css/tailwind.css"

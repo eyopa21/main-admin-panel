@@ -17,9 +17,11 @@
       />
     </div>
 <VueModal />
+<VueConfirm/>
+<PreviewModal/>
     <slot />
     
-    <ModalsEditModal class="block md:hidden"/>
+
   </div>
 </template>
 <script setup>

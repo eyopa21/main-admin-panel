@@ -1,28 +1,39 @@
 <template>
   <div class="flex flex-col md:flex-row">
     <div class="w-full md:w-1/3 flex flex-col">
-      <div class="text-5xl pb-4 border-b-2 border-red-500 font-bold">
+  
+   
+    
+      <div class="text-5xl pb-4 border-b-2 border-red-500 font-bold pt-2">
         Options
       </div>
 
-      <div class="my-4 md:my-4 md:mr-4 flex flex-row md:flex-col space-x-2 md:space-x-0 md:space-y-4">
-        <div class="w-1/2 md:w-full">
+      <div
+        class="
+          my-4
+          md:my-4 md:mr-4
+          flex flex-row
+          md:flex-col
+          space-x-2
+          md:space-x-0 md:space-y-4
+          mx-3
+       
+        "
+      >
+        <div  class="w-1/2 md:w-full">
           <button
             @click="toggleTabs(1)"
             :class="{
-              'text-white bg-gray-600': openTab === 1,
+              'text-white bg-gray-500': openTab === 1,
               'bg-transparent': openTab !== 1,
             }"
             class="
-              bg-transparent
-              hover:bg-blue
-              text-blue-dark
               font-semibold
               hover:text-white
               py-3
               px-4
               md:pr-16
-              border border-emerald-500
+              border border-white
               rounded
               text-left
               hover:bg-gray-500
@@ -31,7 +42,9 @@
           >
             <div class="flex flex-row">
               <PencilAltIcon class="w-6 h-6" />
-              <div class="uppercase hidden md:block">Edit your personal Info</div>
+              <div class="uppercase hidden md:block">
+                Edit your personal Info
+              </div>
             </div>
           </button>
         </div>
@@ -39,19 +52,16 @@
           <button
             @click="toggleTabs(2)"
             :class="{
-              'text-white bg-gray-600': openTab === 2,
+              'text-white bg-gray-500': openTab === 2,
               'bg-transparent': openTab !== 2,
             }"
             class="
-              bg-transparent
-              hover:bg-blue
-              text-blue-dark
               font-semibold
               hover:text-white
               py-3
               px-4
               md:pr-16
-              border border-emerald-500
+              border border-white
               rounded
               text-left
               hover:bg-gray-500
@@ -61,6 +71,32 @@
             <div class="flex flex-row">
               <UserAddIcon class="w-6 h-6" />
               <div class="uppercase hidden md:block">Invite as an Admin</div>
+            </div>
+          </button>
+        </div>
+        <div class="w-1/2 md:w-full">
+          <button
+            @click="toggleTabs(3)"
+            :class="{
+              'text-white bg-gray-500': openTab === 3,
+              '  bg-transparent': openTab !== 3,
+            }"
+            class="
+              font-semibold
+              hover:text-white
+              py-3
+              px-4
+              md:pr-16
+              border border-white
+              rounded
+              text-left
+              hover:bg-gray-500
+              w-full
+            "
+          >
+            <div class="flex flex-row">
+              <LockClosedIcon class="w-6 h-6" />
+              <div class="uppercase hidden md:block">Change Your password</div>
             </div>
           </button>
         </div>
@@ -76,6 +112,9 @@
         <div :class="{ hidden: openTab !== 2, block: openTab === 2 }">
           <SettingsOptionsInvite />
         </div>
+        <div :class="{ hidden: openTab !== 3, block: openTab === 3 }">
+          <SettingsOptionsChangePassword />
+        </div>
       </div>
     </div>
   </div>
@@ -85,7 +124,7 @@ import { ref } from "vue";
 import { UserIcon } from "@heroicons/vue/outline";
 import { PencilAltIcon } from "@heroicons/vue/outline";
 import { UserAddIcon } from "@heroicons/vue/outline";
-
+import { LockClosedIcon } from "@heroicons/vue/outline";
 
 const openTab = ref(1);
 const toggleTabs = (number) => {
