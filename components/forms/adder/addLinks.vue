@@ -18,6 +18,9 @@
           md:min-h-full
         "
       >
+       <div class="mb-8 -ml-2 text-3xl font-bold underline">
+          Add new Social link here
+        </div>
         <FormsIconSelector class="w-full" />
         <VueInput
           type="text"

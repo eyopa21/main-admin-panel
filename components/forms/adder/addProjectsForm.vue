@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <form @submit.prevent="add()">
       <div
         class="
@@ -10,13 +10,13 @@
           w-full
           md:mb-6
           shadow-lg
-          rounded-2xl
+          md:rounded-2xl
           p-8
           min-h-screen
           md:h-full
-          
         "
       >
+       
         <div class="flex flex-row">
           <div
             :class="url ? 'bg-transparent' : 'bg-red-300'"
@@ -32,7 +32,6 @@
                 h-48
                 bg-gray-300
                 rounded
-               
                 dark:bg-gray-700
               "
             >

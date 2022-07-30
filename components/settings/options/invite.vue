@@ -12,6 +12,7 @@
       w-full
     "
   >
+  <div class="text-3xl font-bold underline mb-4 pl-4 md:pl-0 pt-2 md:pt-0">Invite List</div>
     <div class="w-full grid grid-cols-2 lg:grid-cols-3 md:gap-1">
       <div v-for="i in 5" :key="i">
         <ListsInvitesList />

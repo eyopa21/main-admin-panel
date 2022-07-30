@@ -12,11 +12,14 @@
           shadow-lg
           rounded-2xl
           p-8
-       
           h-screen
           md:h-full
         "
       >
+        <div class="mb-8 -ml-2 text-3xl font-bold underline">
+          Add new Skill here
+        </div>
+
         <FormsIconSelector class="w-full" />
         <VueInput
           type="text"

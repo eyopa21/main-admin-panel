@@ -1,11 +1,7 @@
 <template>
-  <div >
+  <div>
   
-  <SettingsSocialLinks/>
   </div>
 </template>
-
 <script setup>
-
 </script>
-

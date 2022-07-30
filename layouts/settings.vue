@@ -20,8 +20,8 @@
           <button
             @click="toggleTabs('/settings')"
             :class="{
-              'text-white bg-gray-500': openTab === '/settings',
-              '  bg-transparent': openTab !== '/settings',
+              'text-white bg-gray-500': $route.fullPath === '/settings',
+              '  bg-transparent': $route.fullPath !== '/settings',
             }"
             class="
               font-semibold
@@ -48,8 +48,8 @@
           <button
             @click="toggleTabs('/settings/general/invite')"
             :class="{
-              'text-white bg-gray-500': openTab === '/settings/general/invite',
-              '  bg-transparent': openTab !== '/settings/general/invite',
+              'text-white bg-gray-500': $route.fullPath === '/settings/general/invite',
+              '  bg-transparent': $route.fullPath !== '/settings/general/invite',
             }"
             class="
               font-semibold
@@ -74,8 +74,8 @@
           <button
             @click="toggleTabs('/settings/general/change')"
             :class="{
-              'text-white bg-gray-500': openTab === '/settings/general/invite',
-              '  bg-transparent': openTab !== '/settings/general/invite',
+              'text-white bg-gray-500': $route.fullPath === '/settings/general/change',
+              '  bg-transparent': $route.fullPath !== '/settings/general/change',
             }"
             class="
               font-semibold

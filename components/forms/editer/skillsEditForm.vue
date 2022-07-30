@@ -13,6 +13,7 @@
         p-2
         md:p-8
         pt-4
+        md:pt-4
         h-screen
         md:h-full
       "

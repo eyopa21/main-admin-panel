@@ -9,9 +9,10 @@
         w-full
         md:mb-6
         shadow-lg
-        rounded-2xl
+        md:rounded-2xl
         p-8
         pt-4
+         md:pt-4
         h-screen
         md:h-full
       "

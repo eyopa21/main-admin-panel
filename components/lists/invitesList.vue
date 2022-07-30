@@ -1,28 +1,29 @@
 <template>
   <div class="w-full">
-    <div class="flex flex-row w-auto p-2 ">
+    <div class="flex flex-row w-auto p-2">
       <div
         class="
           flex flex-col
           w-auto
           h-full
           mx-auto
-          bg-emerald-400
+          bg-gray-100
           pt-0
           pr-0
-        
-          md:p-4
           md:pt-0
-          
-          rounded
-          hover:bg-gray-400
+          hover:bg-gray-300
+          drop-shadow-md
         "
       >
-        <div @click="remove()" class="flex justify-end p-2">
+        <div @click="remove()" class="flex justify-end p-1">
           <TrashIcon class="w-6 h-6 text-red-500" />
         </div>
-        <div class="pl-16 pr-4"><UserIcon class="w-8 h-8 text-blue-600" /></div>
-        <div class="p-1 md:p-2 md:pr-4">jobnigussie@gmail.com</div>
+        <div class="p-3 md:p-4">
+          <div class="pl-12 md:pl-16 pr-4">
+            <UserIcon class="w-8 h-8 text-blue-600" />
+          </div>
+          <div class="p-1 md:p-2 text-xs md:text-sm">jobnigussie@gmail.com</div>
+        </div>
       </div>
     </div>
   </div>

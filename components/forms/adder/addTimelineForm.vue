@@ -11,13 +11,13 @@
           md:mb-6
           shadow-lg
           rounded-2xl
-          p-8
+          md:p-8
           h-screen
           md:h-full
         "
       >
-
-        <div class="p-8">
+        <div class="m-4 text-3xl font-bold underline">Add new timeline here</div>
+        <div class="p-8 pt-4">
           <VueInput
             type="text"
             placeholder="Incident"
