@@ -70,11 +70,33 @@
 <script setup>
 import { useForm } from "vee-validate";
 import { useRouter } from "vue-router";
+import { ADD_TIMELINE } from "~~/gql/timeline/addTImeline";
+import { useQuery, useMutation } from "@vue/apollo-composable";
 const { handleSubmit } = useForm();
 const router = useRouter();
+const layoutState = useLayout()
 
+
+  const { mutate: add_timeline } = useMutation(ADD_TIMELINE);
 const add = handleSubmit((formValues) => {
   console.log(formValues);
+
+  add_timeline({
+    title: formValues.Incident,
+    subtitle: formValues.Place,
+    description: formValues.Year
+  })
+    .then((res) => {
+      console.log("res", res.data);
+        if (process.client) {
+            window.location.reload();
+          }
+    })
+    .catch((err) => {
+      console.log("err", err);
+      layoutState.value.alert.message = "PLease try again";
+      layoutState.value.alert.success = false;
+    });
 });
 
 if (process.client) {

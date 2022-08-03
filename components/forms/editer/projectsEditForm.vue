@@ -16,12 +16,13 @@
         md:pt-4
         pb-4
         min-h-screen
-        md:min-h-full
-        md:h-full md:ml-4
+        md:min-h-full md:h-full md:ml-4
       "
     >
       <div class="flex justify-between mb-2">
-      <div @click="editData.editProject=''"><ArrowCircleLeftIcon class="h-8 w-8 text-black"/></div>
+        <div @click="editData.editProject = ''">
+          <ArrowCircleLeftIcon class="h-8 w-8 text-black" />
+        </div>
         <div class="flex flex-row space-x-2">
           <VueOutlineBtn
             @click="showForm = !showForm"
@@ -30,51 +31,66 @@
             classs=""
           />
           <VueOutlineBtn
-          @click="layoutState.showConfirm = true"
+            @click="deleteProject()"
             name="Delete"
             type="button"
             classs="border-red-500 hover:border-transparent text-red-700 hover:bg-red-400  hover:text-red-500"
           />
         </div>
       </div>
-      <hr class="mb-4">
+      <hr class="mb-4" />
       <div v-if="!showForm" class="flex flex-col">
         <div class="flex flex-row">
-          <div class="flex flex-col space-y-4 w-[60%]">
-            <div class="text-5xl font-bold mb-2">
+          <div class="flex flex-col space-y-4 w-full md:w-[60%]">
+            <div class="text-2xl md:text-3xl font-bold mb-2">
               {{ editData.editProject.title }}
             </div>
             <div class="w-full">
-              <img class="rounded-xl" src="https://i.imgur.com/4zSAWJ5.jpeg" alt="" />
+              <img
+                class="rounded-xl border border-gray-200 h-32 w-full md:h-48"
+                :src="editData.editProject.pricture"
+                alt=""
+              />
             </div>
           </div>
-         
+
           <div class="w-[40%] h-8 pt-20 grid gap-2 grid-cols-2 ml-2">
             <div
-              v-for="skill in editData.editProject.skills"
+              v-for="skill in editData.editProject.project_skills"
               :key="skill"
               class="p-0"
             >
-              <VueBadge :skill="skill" />
+              <VueBadge :skill="skill.skill.skill_name" />
             </div>
           </div>
         </div>
-        <div class="font-bold tracking-widest mb-4">
+        <div class="font-bold tracking-widest mt-2 mb-4">
           {{ editData.editProject.subtitle }}
         </div>
         <div>
           {{ editData.editProject.description }}
         </div>
         <div class="flex flex-row text-xs pt-8">
-          <div class="mr-2"> created at: 2-/20/20</div>|
-          <div class="ml-2">update a: 20/20/20t</div>
+          <div class="mr-2">created at: {{editData.editProject.created_at.split('T', 1)}}</div>
+          |
+          <div class="ml-2">Last update on: {{editData.editProject.updated_at.split('T', 1)}}</div>
         </div>
       </div>
       <form class="pr-2" v-if="showForm" @submit.prevent="add()">
         <div class="flex flex-row">
           <div :class="url ? '' : 'bg-red-300'" class="w-[60%]">
-              
-            <img class="max-h-32 object-fill h-full w-full" :src="url" alt="" />
+            <img
+              class="
+                h-32
+                md:h-48
+                object-fill
+                rounded
+                border border-gray-200
+                w-full
+              "
+              :src="url"
+              alt=""
+            />
           </div>
           <div class="m-4">
             <VueBtn
@@ -115,14 +131,7 @@
           name="Link"
           rule="required"
         />
-        <VueInput
-          :data="editData.editProject.date"
-          @emit-input="(n) => n"
-          placeholder="Date"
-          type="text"
-          name="Date"
-          rule="required"
-        />
+
         <VueInput
           placeholder="Description"
           type="text"
@@ -135,7 +144,7 @@
         <div class="mt-2">
           <label for="chip" class="font-semibold">Skills Used</label>
           <VueChip
-            :skills="editData.editProject.skills"
+            :skills="editData.editProject.project_skills"
             @emit-skills="(n) => (editForm.skills = n)"
           />
         </div>
@@ -152,35 +161,142 @@
 import { ArrowCircleLeftIcon } from "@heroicons/vue/outline";
 import { useForm } from "vee-validate";
 import { useRouter } from "vue-router";
+import { UPDATE_PROJECTS } from "~~/gql/projects/updateProjects";
+import { useQuery, useMutation } from "@vue/apollo-composable";
+import { STORE_IMAGE } from "~~/gql/storeImage";
+import { ADD_SKILL_PROJECT } from "~~/gql/projects/addProjectSkill";
+import { UPDATE_SKILL_PROJECT } from "~~/gql/projects/updateProjectSkill";
+import { DELETE_PROJECTS } from "~~/gql/projects/deleteProject";
+import { DELETE_PROJECT_SKILL } from "~~/gql/projects/deleteProjectSkill";
+
 const { handleSubmit } = useForm();
 const layoutState = useLayout();
 const router = useRouter();
 const showForm = ref(false);
 const editData = useEditData();
 
+const base64 = ref("");
 const editForm = ref({
   skills: [],
   image: "",
-  title: '',
-  subtitle: '',
-  description: '',
-  link: ''
+  title: "",
+  subtitle: "",
+  description: "",
+  link: "",
 });
+
+const { mutate: update_projects } = useMutation(UPDATE_PROJECTS);
+
+const { mutate: store_image } = useMutation(STORE_IMAGE);
+const { mutate: add_project_skill } = useMutation(ADD_SKILL_PROJECT);
 
 const add = handleSubmit((formValues) => {
   console.log(formValues);
   console.log("skills", editForm.value.skills);
   console.log("skills", editForm.value.image);
+  if (base64.value) {
+    store_image({ base64: base64.value })
+      .then((res) => {
+        //layoutState.value.alert.message = "You have successfully add a photo";
+        console.log("res", res.data.storeImage.url);
+
+        update_projects({
+          id: editData.value.editProject.id,
+          title: formValues.Title,
+          subtitle: formValues.Subtitle,
+          description: formValues.Description,
+          link: formValues.Link,
+          pricture: res.data.storeImage.url,
+        })
+          .then((res) => {
+            console.log("res", res.data);
+
+            for (let skill in editForm.value.skills) {
+              add_project_skill({
+                project_id: editData.value.editProject.id,
+                skill_id: editForm.value.skills[0].id,
+              })
+                .then((res) => {
+                  console.log("err", res.data);
+                  layoutState.value.alert.message =
+                    "project updated successfully";
+                  if (process.client) {
+                    window.location.reload();
+                  }
+                })
+                .catch((err) => {
+                  console.log("err", err.message);
+                  layoutState.value.alert.message =
+                    "project updating not successfull";
+                  layoutState.value.alert.success = false;
+                });
+            }
+          })
+          .catch((err) => {
+            console.log("err", err);
+            layoutState.value.alert.message = "PLease try again";
+            layoutState.value.alert.success = false;
+          });
+      })
+      .catch((err) => {
+        console.log("err", err);
+        layoutState.value.alert.message = "PLease try again";
+        layoutState.value.alert.success = false;
+      });
+  } else {
+    update_projects({
+      id: editData.value.editProject.id,
+      title: formValues.Title,
+      subtitle: formValues.Subtitle,
+      description: formValues.Description,
+      link: formValues.Link,
+      pricture: editData.value.editProject.pricture,
+    })
+      .then((res) => {
+        console.log("res", res.data);
+        delete_project_skill({
+          project_id: editData.value.editProject.id,
+        })
+          .then((res) => {
+            for (let skill in editForm.value.skills) {
+              add_project_skill({
+                project_id: editData.value.editProject.id,
+                skill_id: editForm.value.skills[skill].id,
+              })
+                .then((res) => {
+                  console.log("err", res.data);
+                  layoutState.value.alert.message =
+                    "project updated successfully";
+                  if (process.client) {
+                    window.location.reload();
+                  }
+                })
+                .catch((err) => {
+                  console.log("err", err.message);
+                  layoutState.value.alert.message =
+                    "project updating not successfull";
+                  layoutState.value.alert.success = false;
+                });
+            }
+          })
+          .catch((err) => {
+            console.log(err, "errrrrr");
+          });
+      })
+      .catch((err) => {
+        console.log("err", err);
+        layoutState.value.alert.message = "PLease try again";
+        layoutState.value.alert.success = false;
+      });
+  }
 });
 
 const preview = () => {
-layoutState.value.previewData=editForm.value
-}
-
-
+  layoutState.value.previewData = editForm.value;
+};
 
 const image = ref();
-const url = ref(editData.value.editProject.image);
+const url = ref(editData.value.editProject.pricture);
 
 const selectImage = () => {
   var input = document.createElement("input");
@@ -190,6 +306,45 @@ const selectImage = () => {
   input.onchange = (e) => {
     editForm.value.image = e.target.files[0];
     url.value = URL.createObjectURL(editForm.value.image);
+    if (editForm.value.image) {
+      let reader = new FileReader();
+      reader.readAsDataURL(editForm.value.image);
+      reader.onload = function () {
+        base64.value = reader.result.split(",")[1];
+        console.log("base", base64.value);
+      };
+    }
   };
+};
+
+const { mutate: delete_project } = useMutation(DELETE_PROJECTS);
+const { mutate: delete_project_skill } = useMutation(DELETE_PROJECT_SKILL);
+const deleteProject = () => {
+  var value = prompt(
+    `This Action cannot be undone, PLease type ${editData.value.editProject.title} to delete`
+  );
+  if (value == editData.value.editProject.title) {
+    delete_project_skill({
+      project_id: editData.value.editProject.id,
+    })
+      .then((res) => {
+        delete_project({
+          id: editData.value.editProject.id,
+        })
+          .then((res) => {
+            console.log("deleteed");
+
+            if (process.client) {
+              window.location.reload();
+            }
+          })
+          .catch((err) => {
+            console.log("err", err.message);
+          });
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  }
 };
 </script>

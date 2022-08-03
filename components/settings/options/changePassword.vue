@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="admin"
     class="
       flex flex-col
       min-w-0
@@ -14,52 +15,79 @@
       md:min-h-full
     "
   >
-  <div class="mb-8">
-    <div class="text-3xl md:text-5xl text white font-bold">
-      Change your password here
+    <div class="mb-8">
+      <div class="text-3xl md:text-5xl text white font-bold">
+        Change your password here
+      </div>
+      <div class="p-4">
+        Your new password must be different from your previous one
+      </div>
     </div>
-    <div class="p-4">Your new password must be different from your previous one</div>
-  </div>
-  <form @click.prevent="change()">
-    <div class="flex flex-col">
-      <VueInput
-        label="Old Password"
-        placeholder="Old password"
-        type="text"
-        name="Old password"
-        rule="required"
-        classs="w-full h-12"
-        :astrix="true"
-      />
-      <VueInput
-       label="New Password"
-        placeholder="*********"
-        type="password"
-        name="New password"
-        rule="required"
-        classs="w-full h-12"
-        :astrix="true"
-      />
-      <VueInput
-       label="Confirm your new Password"
-        placeholder="**********"
-        type="password"
-        name="Confirm password"
-        rule="confirmPassword"
-        classs="w-full h-12"
-        :astrix="true"
-      />
-      <VueBtn class="pt-8" name="Change" type="submit"/>
-    </div>
+    <form @click.prevent="change()">
+      <div class="flex flex-col">
+        <VueInput
+          label="Old Password"
+          placeholder="Old password"
+          type="text"
+          name="Old_password"
+          rule="required"
+          classs="w-full h-12"
+          :astrix="true"
+        />
+        <VueInput
+          label="New Password"
+          placeholder="*********"
+          type="password"
+          name="New_password"
+          rule="password"
+          classs="w-full h-12"
+          :astrix="true"
+        />
+        <VueInput
+          label="Confirm your new Password"
+          placeholder="**********"
+          type="password"
+          name="Confirm password"
+          rule="confirmed:@New_password"
+          classs="w-full h-12"
+          :astrix="true"
+        />
+        <VueBtn class="pt-8" name="Change" type="submit" />
+      </div>
     </form>
   </div>
 </template>
 <script setup>
 import { useForm } from "vee-validate";
-const { handleSubmit } = useForm();
+import { useQuery, useMutation } from "@vue/apollo-composable";
+import { CHANGE_PASSWORD } from "~~/gql/changePassword";
+const { handleSubmit, resetForm } = useForm();
+const layoutState = useLayout();
+
+const admin = useCookie("admin");
+const { mutate: change_password } = useMutation(CHANGE_PASSWORD);
 const change = handleSubmit((formValues) => {
   console.log(formValues);
+
+  if (formValues.Old_password == layoutState.value.user.password) {
+    change_password({
+      password: formValues.New_password,
+      id: layoutState.value.user.id,
+    })
+      .then((res) => {
+        layoutState.value.alert.message = "Change password successfull";
+        resetForm();
+      })
+      .catch((err) => {
+        console.log("err", err);
+        layoutState.value.alert.message = "Please try again";
+        layoutState.value.alert.success = false;
+        resetForm();
+      });
+  } else {
+    layoutState.value.alert.message = "Your Old password is not correct";
+    layoutState.value.alert.success = false;
+    resetForm();
+  }
 });
-
-
 </script>

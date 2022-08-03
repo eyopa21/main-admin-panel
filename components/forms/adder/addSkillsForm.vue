@@ -20,18 +20,18 @@
           Add new Skill here
         </div>
 
-        <FormsIconSelector class="w-full" />
+        <FormsIconSelector @emit-icon="(n) => icon=n" class="w-full" />
         <VueInput
           type="text"
           placeholder="Skill Name"
-          name="Skill Name"
+          name="Skill_Name"
           rule="required"
         />
         <VueInput
           type="text"
           placeholder="Level"
           name="Level"
-          rule="required"
+          rule="required|number:10,100"
         />
 
         <div class="mt-6 flex flex-row space-x-2">
@@ -66,11 +66,39 @@
 <script setup>
 import { useForm } from "vee-validate";
 import { useRouter } from "vue-router";
+import { useQuery, useMutation } from "@vue/apollo-composable";
+import { ADD_SKILLS } from "~~/gql/skills/addSkills";
 const { handleSubmit } = useForm();
 const router = useRouter();
+const icon =ref()
 
+  const { mutate: add_skills } = useMutation(ADD_SKILLS);
 const add = handleSubmit((formValues) => {
   console.log(formValues);
+  console.log("icon", icon.value)
+
+
+  console.log(formValues);
+  if(icon.value){
+
+ 
+  add_skills({
+    icon: icon.value,
+    level: formValues.Level,
+    skill_name: formValues.Skill_Name
+  })
+    .then((res) => {
+      console.log("res", res.data);
+        if (process.client) {
+            window.location.reload();
+          }
+    })
+    .catch((err) => {
+      console.log("err", err);
+      layoutState.value.alert.message = "PLease try again";
+      layoutState.value.alert.success = false;
+    });
+     }
 });
 
 if (process.client) {

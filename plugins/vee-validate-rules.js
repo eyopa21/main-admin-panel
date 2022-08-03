@@ -43,12 +43,20 @@ export default defineNuxtPlugin((nuxtApp) => {
         return "Minimum 10 characters is needed";
     });
     defineRule("number", (value, [min, max], ctx) => {
-        if (Number(value) > min && Number(value) < max) {
+        if (parseInt(value) > min && parseInt(value) < max) {
+
 
             return true;
         }
+
         return "The value must be between 10 and 100"
     })
+    defineRule('confirmed', (value, [target]) => {
+        if (value === target) {
+            return true;
+        }
+        return 'Passwords must match';
+    });
 
 
 });

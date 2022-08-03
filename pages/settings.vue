@@ -66,7 +66,7 @@
             <div class="hidden md:block">Social Links</div>
           </a>
         </li>
-        <li class="-mb-px mr-2 flex-auto text-center">
+        <!--li class="-mb-px mr-2 flex-auto text-center">
           <a
             class="
               text-xs
@@ -89,7 +89,7 @@
             <AdjustmentsIcon class="w-8 h-8" />
             <div class="hidden md:block">Preferences</div>
           </a>
-        </li>
+        </li-->
       </ul>
       <div>
         <hr />
@@ -126,4 +126,13 @@ const toggleTabs = (number) => {
   openTab.value = number;
   router.push(number);
 };
+
+
+
+
+
+
+
+
+definePageMeta({middleware: "navigation-guard"})
 </script>

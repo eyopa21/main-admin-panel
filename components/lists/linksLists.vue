@@ -11,11 +11,12 @@
       "
     >
       <div class="flex flex-row space-x-4 w-full h-full">
-        <img
-                class="w-12 h-12"
-                src="../../../assets/icons/facebook.svg"
-                alt=""
-              />
+        
+                <div
+          v-if="props.link.iconSvg"
+          class="w-12 h-12"
+          v-html="props.link.iconSvg.svg"
+        ></div>
 
         <div class="flex flex-col">
           <div class="font-semibold text-md">{{props.link.name}}</div>

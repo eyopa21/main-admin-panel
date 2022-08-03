@@ -1,25 +1,25 @@
 <template>
   <div
+    v-if="admin"
     class="
       flex flex-col
       drop-shadow-md
       md:rounded-xl
-      
       bg-white
       min-h-screen
-      md:min-h-full
-      md:p-8
+      md:min-h-full md:p-8
       w-full
     "
   >
-  <div class="text-3xl font-bold underline mb-4 pl-4 md:pl-0 pt-2 md:pt-0">Invite List</div>
+    <div class="text-3xl font-bold underline mb-4 pl-4 md:pl-0 pt-2 md:pt-0">
+      Invite List
+    </div>
     <div class="w-full grid grid-cols-2 lg:grid-cols-3 md:gap-1">
-      <div v-for="i in 5" :key="i">
-        <ListsInvitesList />
+      <div v-for="invite in invites" :key="invite">
+        <ListsInvitesList :invites="invite" />
       </div>
     </div>
-    <div class="w-full  md:ml-4 pt-16 ">
-  
+    <div class="w-full md:ml-4 pt-16">
       <VueBtn
         v-if="!showForm"
         @click="showForm = true"
@@ -27,7 +27,7 @@
         type="button"
         class="w-full flex justify-center md:justify-end"
       />
-  
+
       <form class="w-full" @submit.prevent="invite()">
         <div
           v-if="showForm"
@@ -71,7 +71,7 @@
                 pt-6
               "
               type="button"
-              @click="showForm=false"
+              @click="showForm = false"
             >
               Close
             </button>
@@ -85,11 +85,71 @@
 <script setup>
 import { ref } from "vue";
 import { useForm } from "vee-validate";
+import { GET_INVITES } from "~~/gql/inviites/getInvites";
+import { INVITE_USER } from "~~/gql/inviites/addInvites";
+import { DELETE_INVITES } from "~~/gql/inviites/deleteInvites";
 
+
+import { useQuery, useMutation } from "@vue/apollo-composable";
 const showForm = ref(false);
+const layoutState = useLayout();
+const admin = useCookie("admin");
 
+const { mutate: invite_user } = useMutation(INVITE_USER);
 const { handleSubmit } = useForm();
 const invite = handleSubmit((formValues) => {
   console.log(formValues);
+
+  invite_user({
+    email: formValues.Email,
+  })
+    .then((res) => {
+      if (process.client) {
+        window.location.reload();
+      }
+    })
+    .catch((err) => {
+      console.log("err", err.status);
+      if (
+        err.message ==='Uniqueness violation. duplicate key value violates unique constraint "invites_email_key"'
+      ) {
+        layoutState.value.alert.message = "The user has already invited";
+        layoutState.value.alert.success = false;
+      } else {
+        layoutState.value.alert.message = "PLease try again";
+        layoutState.value.alert.success = false;
+      }
+    });
 });
+
+const invites = ref("");
+const { loading, result, error } = useQuery(GET_INVITES);
+watchEffect(() => {
+  if (result.value) {
+    console.log("result.value user", result.value);
+    invites.value = result.value.invites;
+  } else if (error.value) {
+    console.log("error.value", error.value);
+  }
+});
+
+
+
+const { mutate: delete_Invites } = useMutation(DELETE_INVITES);
+
+const deleteLinks = (id) => {
+  delete_links({
+    id: id,
+  })
+    .then((res) => {
+      if (process.client) {
+        window.location.reload();
+      }
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+};
+
+
 </script>

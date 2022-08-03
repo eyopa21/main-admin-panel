@@ -13,9 +13,9 @@
       justify-center
     "
   >
-    <div class="focus:outline-none flex items-center">
+    <div class="focus:outline-none flex items-center truncate">
       <div class="h-1 w-1 rounded-full bg-gray-700 dark:bg-gray-400 mr-1"></div>
-      <span class="text-xs text-gray-700 dark:text-gray-400 font-normal"
+      <span class="text-xs text-gray-700 dark:text-gray-400 font-normal truncate"
         >{{skill}}</span
       >
     </div>
@@ -29,4 +29,6 @@ const props = defineProps({
     required: true
   }
 })
+
+
 </script>

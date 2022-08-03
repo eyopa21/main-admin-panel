@@ -15,7 +15,8 @@
         <div class="mt-4 mb-10">
           <NuxtLink to="/">
             <img
-              src="https://i.imgur.com/XHO7CaG.jpeg"
+            v-if="layoutState.user.picture"
+              :src="layoutState.user.picture"
               class="rounded-full w-10 h-10 mb-3 mx-auto"
             />
           </NuxtLink>
@@ -139,7 +140,7 @@
           </div>
         </div>
         <div class="mb-4">
-          <NuxtLink to="/login" class="">
+          <NuxtLink @click="logout()" class="">
             <span>
               <LogoutIcon
                 class="h-36 w-8 text-gray-300 mx-auto hover:text-primary"
@@ -160,5 +161,18 @@ import { BriefcaseIcon } from "@heroicons/vue/outline";
 import { ClockIcon } from "@heroicons/vue/outline";
 import { NewspaperIcon } from "@heroicons/vue/outline";
 import { AdjustmentsIcon } from "@heroicons/vue/outline";
+import { useRouter } from "vue-router";
+const cookie = useCookie('isLoggedIn')
+const admin = useCookie('admin');
+const router = useRouter();
+
+const layoutState = useLayout();
+
+const logout = () => {
+  console.log("loggoing out")
+  cookie.value = null;
+  admin.value = null;
+  router.push('/login')
+}
 
 </script>

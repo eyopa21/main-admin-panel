@@ -5,10 +5,10 @@
         <div class="flex flex-col justify-start mx-6 pl-2">
           <img
             class="h-10 w-10 rounded-full"
-            src="https://i.imgur.com/XHO7CaG.jpeg"
+            :src="layoutState.user.picture"
           />
           <span class="text-gray-600 dark:text-gray-300 text-xl font-bold">
-            Eyoba
+            {{layoutState.user.logo}}
           </span>
         </div>
         <nav class="px-6">
@@ -160,7 +160,7 @@
         </nav>
         <div class="absolute bottom-0 my-10">
           <NuxtLink
-            to="/login"
+            @click="logout()"
             class="
               hover:text-gray-800 hover:bg-gray-100
               dark:hover:text-white dark:hover:bg-gray-600
@@ -194,4 +194,17 @@ import { ClockIcon } from "@heroicons/vue/outline";
 import { NewspaperIcon } from "@heroicons/vue/outline";
 import { AdjustmentsIcon } from "@heroicons/vue/outline";
 import { LogoutIcon } from "@heroicons/vue/outline";
+
+const router = useRouter();
+const cookie = useCookie('isLoggedIn')
+const admin = useCookie('admin')
+
+const layoutState = useLayout();
+
+const logout = () => {
+  console.log("loggoing out")
+  cookie.value = null;
+  admin.value = null;
+  router.push('/login')
+}
 </script>

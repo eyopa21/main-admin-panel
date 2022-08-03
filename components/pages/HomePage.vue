@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col-reverse md:flex-row md:space-x-2">
-    <div class="w-full md:w-1/2">
+    <div class="w-full h-full md:w-1/2">
       <form @submit.prevent="updateContent()">
         <div
           class="
@@ -21,8 +21,10 @@
             rule="required"
             classs="w-full h-12"
             label="Header"
+            :data="data.header"
+            @emit-input="(n) => (data.header = n)"
           />
-          <VueInput
+          <LazyVueInput
             placeholder="Description"
             type="text"
             name="Description"
@@ -30,6 +32,8 @@
             classs="w-full "
             label="Description"
             :textarea="true"
+             :data="data.description"
+            @emit-input="(n) => (data.description = n)"
           />
           <VueBtn name="Update" type="submit" class="pt-8" />
         </div>
@@ -37,21 +41,16 @@
 
       <!--VueBtn name="homepage" type="button" icon="test" classs="py-6 rounded-2xl "/-->
     </div>
-    <div class="w-full md:w-1/2">
+    <div class="w-fullmin-h-full md:w-1/2">
       <div
-        class="flex flex-col bg-bg_color w-full mb-6 shadow-lg rounded-2xl p-8"
+        class="flex flex-col bg-bg_color w-full mb-6 shadow-lg rounded-2xl p-8  break-words"
       >
         <div class="flex flex-col">
-          <div class="text-7xl font-bold text-primary mb-12">Header</div>
+          <div class="text-3xl md:text-5xl font-bold text-primary mb-12">
+            {{ data.header }}
+          </div>
           <div class="text-secondary pb-2">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s
-            with the release of Letraset sheets containing Lorem Ipsum passages
-            Letraset sheets containing 
+            {{ data.description }}
           </div>
         </div>
       </div>
@@ -62,12 +61,45 @@
 </template>
 <script setup>
 import { useForm } from "vee-validate";
+import { GET_HOMEPAGE } from "~~/gql/getHomepage";
+import { UPDATE_HOMEPAGE } from "~~/gql/pages/updateHompage";
+import { useQuery, useMutation } from "@vue/apollo-composable";
 const { handleSubmit } = useForm();
+const layoutState = useLayout();
+const data = ref({
+  header: "",
+  description: "",
+});
+const { mutate: update_homePage } = useMutation(UPDATE_HOMEPAGE);
 const updateContent = handleSubmit((formValues) => {
   console.log(formValues);
+  update_homePage({
+    header: formValues.Header,
+    description: formValues.Description,
+  })
+    .then((res) => {
+      console.log("res", res.data);
+            if (process.client) {
+        window.location.reload();
+      }
+    })
+    .catch((err) => {
+      console.log("err", err);
+      layoutState.value.alert.message = "PLease try again";
+      layoutState.value.alert.success = false;
+    });
 });
 
-
-
-
+const { loading, result, error } = useQuery(GET_HOMEPAGE);
+watchEffect(() => {
+  if (result.value) {
+    console.log("result.value", result.value.homePage);
+    data.value.header = result.value.homePage[0].header;
+    data.value.description = result.value.homePage[0].description;
+  } else if (error.value) {
+    console.log("error.value", error.value);
+    layoutState.value.alert.message = "Connection error please try again";
+    layoutState.value.alert.success = false;
+  }
+});
 </script>

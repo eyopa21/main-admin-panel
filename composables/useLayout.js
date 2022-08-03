@@ -2,10 +2,15 @@ export default function() {
     return useState('state', () => {
         return {
             showSideBar: false,
-            closeSidebar: true,
+            closeSidebar: false,
             showModal: false,
             showConfirm: false,
-            previewData: ''
+            previewData: '',
+            alert: {
+                message: '',
+                success: true
+            },
+            user: ''
 
         }
     })

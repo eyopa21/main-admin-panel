@@ -34,7 +34,7 @@
                     flex-initial
                   "
                 >
-                  {{ select }}
+                  {{ select.skill_name }}
                 </div>
                 <div class="flex flex-auto flex-row-reverse">
                   <div>
@@ -71,7 +71,7 @@
         >
           <div class="flex flex-col w-full">
             <div
-              v-for="(skill, key) in props.skills"
+              v-for="(skill, key) in skills"
               :key="key"
               class="
                 cursor-pointer
@@ -93,7 +93,7 @@
               >
                 <div class="w-full items-center flex">
                   <div class="mx-2 text-sm">
-                    {{ skill }}
+                    {{ skill.skill_name }}
                   </div>
                 </div>
               </div>
@@ -108,7 +108,12 @@
 <script setup>
 import { XIcon } from "@heroicons/vue/outline";
 import { ref } from "vue";
-
+import {
+  
+  useQuery,
+  useMutation,
+} from "@vue/apollo-composable";
+import { GET_SKILLS } from "~~/gql/skills/skills";
 const emit = defineEmits(["emit-skills"]);
 const props = defineProps({
   skills: {
@@ -116,37 +121,37 @@ const props = defineProps({
     required: true,
   },
 });
+//console.log("chip", props.skills)
 
-const skills = ref([
-  {
-    skill_name: "hello",
-    level: 50,
-  },
-  {
-    skill_name: "hello",
-    level: 50,
-  },
-  {
-    skill_name: "hello",
-    level: 50,
-  },
-  {
-    skill_name: "hello",
-    level: 50,
-  },
-  {
-    skill_name: "hello",
-    level: 50,
-  },
-]);
+const skills = ref('')
+
+  const { loading, result, error } = useQuery(GET_SKILLS);
+  watchEffect(() => {
+    if (result.value) {
+      console.log("result.value", result.value);
+      skills.value = result.value.skills
+    } else if (error.value) {
+      console.log("error.value", error.value);
+    }
+
+
+  })
+
+
 const selected = ref([]);
+let selectednames = ref([])
 for (var i in props.skills) {
-  selected.value.push(props.skills[i]);
+  selected.value.push(props.skills[i].skill);
+  selectednames.value.push(props.skills[i].skill.skill_name)
 }
+//console.log("selectedvalue", selected.value)
+//console.log("names", selectednames.value)
+
 emit("emit-skills", selected.value);
 const test = ref(false);
 const select = (skill, key) => {
-  if (selected.value.includes(skill)) {
+    console.log("skillllll", skill)
+  if (selectednames.value.includes(skill.skill_name) || selected.value.includes(skill)) {
     console.log("already selectd");
     test.value = true;
   } else {

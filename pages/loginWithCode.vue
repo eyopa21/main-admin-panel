@@ -1,0 +1,122 @@
+<template>
+  <div class="px-4">
+    <div
+      class="
+        flex
+        md:flex-row
+        flex-col
+        text-center
+        md:text-left
+        h-screen
+        justify-center
+        items-center
+        lg:ml-48
+        md:ml-32
+      "
+    >
+      <div class="flex flex-col w-full mb-8">
+        <div class="flex flex-row">
+          <AdjustmentsIcon class="w-12 h-12 text-light_bg" />
+
+          <h1 class="text-5xl text-gray-800 font-bold mb-4">My admin</h1>
+        </div>
+        <p class="w-full mx-auto md:mx-0 text-gray-500">
+          Control and monitor your website data from here.
+        </p>
+        <img
+          src="../assets/img/login-vector.png"
+          alt="login"
+          class="w-128 h-96 hidden md:block"
+        />
+      </div>
+
+      <div class="w-full mx-auto md:mx-0">
+        <div class="bg-white p-10 flex flex-col shadow-xl rounded-2xl md:mr-16">
+          <h2 class="text-2xl font-bold text-gray-800 text-left mb-8">
+            Login here ...
+          </h2>
+          <form @submit.prevent="login()">
+            <div class="flex flex-col mb-4 space-y-8 pr-2">
+              <VueInput
+                placeholder="Email"
+                type="text"
+                name="email"
+                rule="email"
+                classs="w-full h-12"
+              />
+              <VueInput
+                placeholder="Code"
+                type="text"
+                name="code"
+                rule="required"
+                classs="w-full h-12"
+              />
+
+              <div class="ml-1 -pt-4">
+                <NuxtLink>
+                  <VueBtn name="Login" type="submit" />
+                </NuxtLink>
+              </div>
+            </div>
+
+            <div class="flex flex-row justify-between -ml-2 space-x-8">
+              <NuxtLink to="/login">
+                <button
+                  class="
+                    w-full
+                    text-center
+                    font-medium
+                    text-gray-500
+                    hover:underline
+                  "
+                >
+                  Login as admin Instead
+                </button>
+              </NuxtLink>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { PencilAltIcon } from "@heroicons/vue/outline";
+import { AdjustmentsIcon } from "@heroicons/vue/outline";
+import { useForm } from "vee-validate";
+import { useRouter } from "vue-router";
+import {
+  DefaultApolloClient,
+  provideApolloClient,
+  useQuery,
+  useMutation,
+} from "@vue/apollo-composable";
+import { GET_POSTS } from "../gql/test.js";
+import { gql } from "@apollo/client/core";
+import { LOGIN } from "~~/gql/login.js";
+import { LOGIN_VIA_CODE } from "~~/gql/loginViaCode.js";
+const { handleSubmit } = useForm();
+const layoutState = useLayout();
+const cookie = useCookie("isLoggedIn");
+const router = useRouter();
+
+const { mutate: login_with_code } = useMutation(LOGIN_VIA_CODE);
+const login = handleSubmit((formValues) => {
+  console.log(formValues);
+
+  login_with_code({ email: formValues.email, code: formValues.code })
+    .then((res) => {
+      console.log("res", res.data);
+      cookie.value = true;
+      router.push("/");
+    })
+    .catch((err) => {
+      console.log("err", err);
+      layoutState.value.alert.message = "User not found";
+      layoutState.value.alert.success = false;
+    });
+});
+
+definePageMeta({ middleware: "navigation-guard" });
+</script>

@@ -35,7 +35,7 @@
           <h2 class="text-2xl font-bold text-gray-800 text-left mb-8">
             Login here ...
           </h2>
-          <form @click.prevent="login()">
+          <form @submit.prevent="login()">
             <div class="flex flex-col mb-4 space-y-8 pr-2">
               <VueInput
                 placeholder="Email"
@@ -53,13 +53,14 @@
               />
 
               <div class="ml-1 -pt-4">
-                <NuxtLink to="/">
+                <NuxtLink >
                   <VueBtn name="Login" type="submit" />
                 </NuxtLink>
               </div>
             </div>
 
             <div class="flex flex-row justify-between -ml-2 space-x-8">
+            <NuxtLink to="/loginwithcode">
               <button
                 class="
                   w-full
@@ -71,6 +72,7 @@
               >
                 Login via invite link
               </button>
+            </NuxtLink>
               <button
                 type="button"
                 class="
@@ -96,56 +98,44 @@
 import { PencilAltIcon } from "@heroicons/vue/outline";
 import { AdjustmentsIcon } from "@heroicons/vue/outline";
 import { useForm } from "vee-validate";
-
-import { useQuery, useMutation } from "@vue/apollo-composable";
+import { useRouter } from "vue-router";
+import {
+  DefaultApolloClient,
+  provideApolloClient,
+  useQuery,
+  useMutation,
+} from "@vue/apollo-composable";
 import { GET_POSTS } from "../gql/test.js";
 import { gql } from "@apollo/client/core";
+import { LOGIN } from "~~/gql/login.js";
 const { handleSubmit } = useForm();
+const layoutState = useLayout();
+const cookie = useCookie('isLoggedIn')
+const admin = useCookie('admin');
+const router = useRouter()
+
+const { mutate: register } = useMutation(LOGIN);
 const login = handleSubmit((formValues) => {
   console.log(formValues);
- 
   
-});
-/*
-if (process.client) {
-    const { mutate: register } = useMutation(
-      gql`
-        mutation {
-          insert_social_links(
-            objects: { name: "nn", value: "nn", icon: "nn" }
-          ) {
-            returning {
-              id
-              name
-              icon
-              updated_at
-              value
-              created_at
-            }
-          }
-        }
-      `
-    );
-    register()
-      .then((res) => {
-        console.log("res", res.data);
-      })
-      .catch((err) => {
-        console.log("err", err);
-      });
-  }
-function test() {
-  const { loading, result, error } = useQuery(GET_POSTS);
-  watchEffect(() => {
-    if (result.value) {
-      console.log("result.value", result.value);
-    } else if (error.value) {
-      console.log("error.value", error.value);
-    }
-  });
-}
+  
+  register({ email: formValues.email, password: formValues.password})
+    .then((res) => {
+      console.log("res", res.data);
+      cookie.value = true;
+      admin.value =  true;
+      router.push('/')
+    })
+    .catch((err) => {
+      console.log("err", err);
+      layoutState.value.alert.message = "User not found";
+      layoutState.value.alert.success = false;
 
-//test();
-*/
-const layoutState = useLayout();
+    });
+});
+
+definePageMeta({middleware: "navigation-guard"})
+
+
+
 </script>

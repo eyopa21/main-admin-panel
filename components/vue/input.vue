@@ -20,6 +20,8 @@
         {{ errorMessage }}
       </p>
       <div class="relative w-full">
+      <div>
+     
         <textarea
           v-if="props.textarea"
           :class="{
@@ -47,12 +49,15 @@
           :placeholder="props.placeholder"
         >
         </textarea>
+         </div>
         <input
           v-if="!props.textarea"
           :class="{
             'border-red-500 focus:border-red-500': errorMessage,
             'rounded-full':props.rounded,
-            'rounded': !props.rounded
+            'rounded': !props.rounded, 
+            'h-8': props.small,
+            'h-12': !props.small
            
         
           }"
@@ -122,7 +127,6 @@ const props = defineProps({
     required: false,
   },
   data: {
-    type: String,
     required: false,
   },
   icon: {
@@ -134,6 +138,10 @@ const props = defineProps({
     required: false
   },
   astrix: {
+    type: Boolean,
+    default: false
+  },
+  small: {
     type: Boolean,
     default: false
   }

@@ -9,9 +9,9 @@
         w-full
         mb-6
         shadow-lg
-       
         min-h-screen
         md:min-h-full
+        rounded
       "
     >
       <form @submit.prevent="update()">
@@ -21,9 +21,16 @@
               <div class="flex items-center space-x-4">
                 <div @click="selectImage()" class="relative z-0">
                   <img
+                    v-if="data.picture && !url"
+                    class="w-20 h-20 md:w-36 md:h-36 rounded-full object-fit"
+                    :src="data.picture"
+                    alt="profile pic"
+                  />
+                   <img
+                    v-if="url"
                     class="w-20 h-20 md:w-36 md:h-36 rounded-full object-fit"
                     :src="url"
-                    alt=""
+                    alt="profile pic"
                   />
                   <span
                     class="
@@ -40,11 +47,13 @@
                   /></span>
                 </div>
               </div>
-              <div class="md:m-auto text-xl font-bold">Edit your personal information here</div>
+              <div class="md:m-auto text-xl md:text-2xl font-bold">
+                Edit your personal information here
+              </div>
             </div>
           </div>
 
-          <div class="flex flex-row space-x-2 justify-between">
+          <div class="flex flex-row space-x-2 justify-between md:mt-8">
             <VueInput
               placeholder="Full Name"
               type="text"
@@ -52,6 +61,9 @@
               rule="required"
               classs="w-full h-12"
               class="w-1/2"
+              :data="data.name"
+              label="Full Name"
+              :astrix="true"
             />
             <VueInput
               placeholder="Logo Name"
@@ -60,6 +72,9 @@
               rule="required"
               classs="w-full h-12"
               class="w-1/2"
+              :data="data.logo"
+               label="Logo Name"
+              :astrix="true"
             />
           </div>
           <VueInput
@@ -68,13 +83,9 @@
             name="Location"
             rule="required"
             classs="w-full h-12"
-          />
-          <VueInput
-            placeholder="Password"
-            type="password"
-            name="password"
-            rule="password"
-            classs="w-full h-12"
+            :data="data.location"
+             label="Location"
+              :astrix="true"
           />
         </div>
         <div class="m-8">
@@ -82,22 +93,57 @@
         </div>
       </form>
     </div>
+    
   </div>
 </template>
 
 <script setup>
 import { useForm } from "vee-validate";
 import { CameraIcon } from "@heroicons/vue/outline";
+import { GET_USER } from "~~/gql/user/getUser";
+import { UPDATE_USER } from "~~/gql/user/updateUser";
+import { STORE_IMAGE } from "~~/gql/storeImage";
+
+import { useQuery, useMutation } from "@vue/apollo-composable";
 const { handleSubmit } = useForm();
+const base64 = ref("");
+const layoutState = useLayout();
+const { mutate: store_image } = useMutation(STORE_IMAGE);
+
+const { mutate: update_user } = useMutation(UPDATE_USER);
 const update = handleSubmit((formValues) => {
   console.log(formValues);
+
+  store_image({ base64: base64.value })
+    .then((res) => {
+        console.log("res.data.storeImage.url", res.data.storeImage.url)
+      update_user({
+        id: data.value.id,
+        logo: formValues.Logo,
+        name: formValues.Name,
+        picture: res.data.storeImage.url,
+        location: formValues.Location,
+      })
+        .then((res) => {
+            if (process.client) {
+            window.location.reload();
+          }
+        })
+        .catch((err) => {
+          console.log("err", err);
+          layoutState.value.alert.message = "PLease try again";
+          layoutState.value.alert.success = false;
+        });
+    })
+    .catch((err) => {
+      console.log("Err", err.message);
+    });
 });
 
 const image = ref();
+const data = ref("");
+const url = ref('');
 
-const url = ref(
-  "https://firebasestorage.googleapis.com/v0/b/gbi-date.appspot.com/o/images%2Feyobaaaaaaaaa.jpg?alt=media&token=fcd6b46e-51ab-434f-97dd-70ae19761d06"
-);
 const selectImage = () => {
   var input = document.createElement("input");
   input.type = "file";
@@ -106,6 +152,28 @@ const selectImage = () => {
   input.onchange = (e) => {
     image.value = e.target.files[0];
     url.value = URL.createObjectURL(image.value);
+    let reader = new FileReader();
+    reader.readAsDataURL(image.value);
+    reader.onload = function () {
+      base64.value = reader.result.split(",")[1];
+      console.log("base", base64.value);
+    };
   };
 };
+
+
+
+
+const { loading, result, error } = useQuery(GET_USER);
+watchEffect(() => {
+  if (result.value) {
+    console.log("result.value user", result.value);
+    data.value = result.value.user[0];
+    
+  } else if (error.value) {
+    console.log("error.value", error.value);
+  }
+});
+
+
 </script>

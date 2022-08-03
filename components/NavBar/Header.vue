@@ -40,14 +40,14 @@
             />
           </div>
           
-          <div class="flex flex-row">
+          <div class="flex flex-row" v-if="layoutState.user">
             <img
-              src="https://firebasestorage.googleapis.com/v0/b/gbi-date.appspot.com/o/images%2Feyobaaaaaaaaa.jpg?alt=media&token=fcd6b46e-51ab-434f-97dd-70ae19761d06"
+              :src="layoutState.user.picture"
               class="mx-auto w-8 h-8 rounded-full mr-2"
             />
             <div class="text-gray-200 font-bold justify-center">
-              Eyob Nigussie
-              <div class="flex justify-end text-xs">{{ getDate }}</div>
+              {{layoutState.user.name}}
+              <div class="flex justify-end text-xs">{{getDate}}</div>
             </div>
           </div>
         </div>
@@ -60,6 +60,7 @@ import { ArrowCircleLeftIcon } from "@heroicons/vue/outline";
 import { ArrowCircleRightIcon } from "@heroicons/vue/outline";
 import { AdjustmentsIcon } from "@heroicons/vue/outline";
 import { MenuIcon } from "@heroicons/vue/outline";
+import { onMounted } from "vue";
 
 const layoutState = useLayout();
 const closeSideBar = ref(false);
@@ -69,4 +70,6 @@ const getDate = computed(() => {
   console.log("date", date);
   return date.toUTCString();
 });
+
+
 </script>

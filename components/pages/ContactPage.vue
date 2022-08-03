@@ -21,6 +21,8 @@
             rule="required"
             classs="w-full h-12"
             label="Header"
+            :data="data.header"
+            @emit-input="(n) => (data.header = n)"
           />
           <VueInput
             placeholder="Description"
@@ -30,6 +32,8 @@
             classs="w-full "
             label="Description"
             :textarea="true"
+            :data="data.description"
+            @emit-input="(n) => (data.description = n)"
           />
           <VueBtn name="Update" type="submit" class="pt-8" />
         </div>
@@ -39,19 +43,14 @@
     </div>
     <div class="w-full md:w-1/2">
       <div
-        class="flex flex-col bg-bg_color w-full mb-6 shadow-lg rounded-2xl p-8"
+        class="flex flex-col bg-bg_color w-full mb-6 shadow-lg rounded-2xl p-8  break-words"
       >
         <div class="flex flex-col">
-          <div class="text-7xl font-bold text-primary mb-12">Header</div>
+          <div class="text-3xl md:text-5xl font-bold text-primary mb-12">
+            {{ data.header }}
+          </div>
           <div class="text-secondary pb-2">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s
-            with the release of Letraset sheets containing Lorem Ipsum passages
-            Letraset sheets containing 
+            {{ data.description }}
           </div>
         </div>
       </div>
@@ -62,12 +61,46 @@
 </template>
 <script setup>
 import { useForm } from "vee-validate";
+
+import { useQuery, useMutation } from "@vue/apollo-composable";
+import { GET_CONTACTPAGE } from "~~/gql/getContactpage";
+import { UPDATE_CONTACTPAGE } from "~~/gql/pages/updateContactpage";
 const { handleSubmit } = useForm();
+const layoutState = useLayout();
+const data = ref({
+  header: "",
+  description: "",
+});
+const { mutate: update_homePage } = useMutation(UPDATE_CONTACTPAGE);
 const updateContent = handleSubmit((formValues) => {
   console.log(formValues);
+  update_homePage({
+    header: formValues.Header,
+    description: formValues.Description,
+  })
+    .then((res) => {
+      console.log("res", res.data);
+            if (process.client) {
+        window.location.reload();
+      }
+    })
+    .catch((err) => {
+      console.log("err", err);
+      layoutState.value.alert.message = "PLease try again";
+      layoutState.value.alert.success = false;
+    });
 });
 
-
-
-
+const { loading, result, error } = useQuery(GET_CONTACTPAGE);
+watchEffect(() => {
+  if (result.value) {
+    console.log("result.value", result.value.contactPage);
+    data.value.header = result.value.contactPage[0].header;
+    data.value.description = result.value.contactPage[0].description;
+  } else if (error.value) {
+    console.log("error.value", error.value);
+    layoutState.value.alert.message = "Connection error please try again";
+    layoutState.value.alert.success = false;
+  }
+});
 </script>

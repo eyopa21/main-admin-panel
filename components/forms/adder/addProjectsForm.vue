@@ -16,7 +16,6 @@
           md:h-full
         "
       >
-       
         <div class="flex flex-row">
           <div
             :class="url ? 'bg-transparent' : 'bg-red-300'"
@@ -82,7 +81,7 @@
           />
         </div>
         <VueInput placeholder="Link" type="text" name="Link" rule="required" />
-        <VueInput placeholder="Date" type="date" name="Date" rule="required" />
+
         <VueInput
           placeholder="Description"
           type="text"
@@ -92,11 +91,12 @@
         />
         <div class="mt-2">
           <label for="chip" class="font-semibold">Skills Used</label>
-          <VueChip />
+          <VueChip @emit-skills="(n) => (skills = n)" />
         </div>
 
         <div class="mt-6 flex flex-row space-x-2">
           <VueBtn name="Add" type="submit" />
+
           <button
             class="
               text-red-500
@@ -127,16 +127,72 @@
 <script setup>
 import { useForm } from "vee-validate";
 import { useRouter } from "vue-router";
-const { handleSubmit } = useForm();
+import { STORE_IMAGE } from "~~/gql/storeImage";
+import {
+  DefaultApolloClient,
+  provideApolloClient,
+  useQuery,
+  useMutation,
+} from "@vue/apollo-composable";
+import { ADD_PROJECTS } from "~~/gql/projects/addProjects";
+import { ADD_SKILL_PROJECT } from "~~/gql/projects/addProjectSkill";
+const layoutState = useLayout();
+const { handleSubmit, isSubmitting } = useForm();
 const router = useRouter();
+const image = ref();
+const url = ref("");
+const base64 = ref("");
+const skills = ref([]);
+
+const { mutate: store_image } = useMutation(STORE_IMAGE);
+const { mutate: add_projects } = useMutation(ADD_PROJECTS);
+const { mutate: add_project_skill } = useMutation(ADD_SKILL_PROJECT);
 
 const add = handleSubmit((formValues) => {
   console.log(formValues);
+  console.log("ski", skills.value);
+
+  console.log("base", base64.value);
+  store_image({ base64: base64.value })
+    .then((res) => {
+      //console.log("res", res.data.storeImage.url);
+      add_projects({
+        title: formValues.Title,
+        subtitle: formValues.Subtitle,
+        description: formValues.Description,
+        link: formValues.Link,
+        pricture: res.data.storeImage.url,
+      })
+        .then((res) => {
+          for (let skill in skills.value) {
+            add_project_skill({
+              project_id: res.data.insert_projects_one.id,
+              skill_id: skills.value[skill].id,
+            })
+              .then((res) => {
+                console.log("err", res.data);
+                layoutState.value.alert.message = "project added successfully";
+                if (process.client) {
+                  window.location.reload();
+                }
+              })
+              .catch((err) => {
+                console.log("err", err.message);
+              });
+          }
+        })
+        .catch((err) => {
+          console.log("err", err);
+          layoutState.value.alert.message = "PLease try again";
+          layoutState.value.alert.success = false;
+        });
+    })
+    .catch((err) => {
+      console.log("err", err);
+      layoutState.value.alert.message = "PLease try again";
+      layoutState.value.alert.success = false;
+    });
 });
-
-const image = ref();
-const url = ref("");
-
 const selectImage = () => {
   var input = document.createElement("input");
   input.type = "file";
@@ -145,6 +201,12 @@ const selectImage = () => {
   input.onchange = (e) => {
     image.value = e.target.files[0];
     url.value = URL.createObjectURL(image.value);
+    let reader = new FileReader();
+    reader.readAsDataURL(image.value);
+    reader.onload = function () {
+      base64.value = reader.result.split(",")[1];
+      console.log("base", base64.value);
+    };
   };
 };
 </script>

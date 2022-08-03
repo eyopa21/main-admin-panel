@@ -5,31 +5,7 @@
     <VueSearch/>
     <VueConfirm/>
    
-   <div>
-          <li class="-mb-px mr-2 flex-auto text-center">
-          <a
-            class="
-              text-xs
-              font-bold
-              uppercase
-              px-5
-              py-3
-              shadow-lg
-              rounded
-              block
-              leading-normal
-            "
-          
-            :class="{
-              'text-emerald-600 bg-white': true,
-              'text-white bg-emerald-600': false,
-            }"
-          >
-            <HomeIcon class="w-8 h-8" />
-            <div class="hidden md:block">General</div>
-          </a>
-        </li>
-   </div>
+ <div class="m-64 "> <VueSkeleton/></div>
   </div>
 </template>
 <script setup>

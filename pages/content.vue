@@ -132,4 +132,8 @@ const openTab = ref(1);
 const toggleTabs = (number) => {
   openTab.value = number;
 };
+
+
+
+definePageMeta({middleware: "navigation-guard"})
 </script>

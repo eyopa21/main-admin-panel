@@ -18,14 +18,14 @@
           md:min-h-full
         "
       >
-       <div class="mb-8 -ml-2 text-3xl font-bold underline">
+        <div class="mb-8 -ml-2 text-3xl font-bold underline">
           Add new Social link here
         </div>
-        <FormsIconSelector class="w-full" />
+        <FormsIconSelector @emit-icon="(n) => (icon = n)" class="w-full" />
         <VueInput
           type="text"
           placeholder="Social Link Name"
-          name="Link Name"
+          name="Link_Name"
           rule="required"
         />
         <VueInput
@@ -67,11 +67,31 @@
 <script setup>
 import { useForm } from "vee-validate";
 import { useRouter } from "vue-router";
-const { handleSubmit } = useForm();
+import { ADD_LINKS } from "~~/gql/links/addLinks";
+import { useQuery, useMutation } from "@vue/apollo-composable";
 const router = useRouter();
+const { handleSubmit } = useForm();
 
+const icon = ref("");
+
+const { mutate: add_links } = useMutation(ADD_LINKS);
 const add = handleSubmit((formValues) => {
   console.log(formValues);
+  add_links({
+    icon: icon.value,
+    name: formValues.Link_Name,
+    value: formValues.Value,
+  })
+    .then((res) => {
+       if (process.client) {
+            window.location.reload();
+          }
+    })
+    .catch((err) => {
+      console.log("err", err);
+      layoutState.value.alert.message = "PLease try again";
+      layoutState.value.alert.success = false;
+    });
 });
 
 if (process.client) {

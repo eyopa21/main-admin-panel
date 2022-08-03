@@ -2,7 +2,7 @@
   <div class="bg-gray-300">
     <div
       class="fixed w-full top-0 left-0 z-20"
-      :class="[$route.fullPath == '/login' ? 'hidden' : 'block']"
+      :class="[$route.fullPath == '/login' || $route.fullPath == '/loginwithcode'  ? 'hidden' : 'block']"
     >
       <NavBarHeader @resize="onResize()" />
       <NavBarNavbarCollapsed
@@ -19,6 +19,9 @@
 <VueModal />
 <VueConfirm/>
 <PreviewModal/>
+<div>
+<VueAlert  v-if="layoutState.alert.message"/>
+</div>
     <slot />
     
 
@@ -45,4 +48,7 @@ const onResize = () => {
 if (process.client) {
   window.addEventListener("resize", onResize);
 }
+
+
+
 </script>

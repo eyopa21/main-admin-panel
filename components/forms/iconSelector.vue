@@ -16,15 +16,14 @@
       placeholder="Search icons"
       type="search"
       name="Search"
-      rule="required"
       classs="w-full h-12"
       class="mb-2"
+      @emit-input="(n) => (searchValue = n)"
     />
     <ul
       class="
         px-4
         md:px-16
-       
         dark:border-gray-700
         w-full
         grid grid-cols-3
@@ -33,88 +32,8 @@
       "
     >
       <li
-        :class="{ 'bg-indigo-500 text-gray-100': item === '1' }"
-        @click="item = '1'"
-        class="
-          py-3
-          px-4
-   
-          border-b-0
-          list-none
-          rounded-sm
-          hover:text-white hover:bg-indigo-500
-          w-16
-        "
-      >
-        <HomeIcon class="w-8 h-8 text-red-600" />
-      </li>
-      <li
-        :class="{ 'bg-indigo-500 text-gray-100': item === '1' }"
-        @click="item = '1'"
-        class="
-          py-3
-          px-4
- 
-          border-b-0
-          list-none
-          rounded-sm
-          hover:text-white hover:bg-indigo-500
-          w-16
-        "
-      >
-        <HomeIcon class="w-8 h-8 text-red-600" />
-      </li>
-      <li
-        :class="{ 'bg-indigo-500 text-gray-100': item === '1' }"
-        @click="item = '1'"
-        class="
-          py-3
-          px-4
-         
-          border-b-0
-          list-none
-          rounded-sm
-          hover:text-white hover:bg-indigo-500
-          w-16
-        "
-      >
-        <HomeIcon class="w-8 h-8 text-red-600" />
-      </li>
-      <li
-        :class="{ 'bg-indigo-500 text-gray-100': item === '1' }"
-        @click="item = '1'"
-        class="
-          py-3
-          px-4
-        
-          border-b-0
-          list-none
-          rounded-sm
-          hover:text-white hover:bg-indigo-500
-          w-16
-        "
-      >
-        <HomeIcon class="w-8 h-8 text-red-600" />
-      </li>
-      <li
-        :class="{ 'bg-indigo-500 text-gray-100': item === '1' }"
-        @click="item = '1'"
-        class="
-          py-3
-          px-4
-    
-          border-b-0
-          list-none
-          rounded-sm
-          hover:text-white hover:bg-indigo-500
-          w-16
-        "
-      >
-        <HomeIcon class="w-8 h-8 text-red-600" />
-      </li>
-      <li
-        :class="{ 'bg-indigo-500 text-gray-100': item === '1' }"
-        @click="item = '1'"
+        :class="{ 'bg-indigo-500 text-gray-100': item === icon.id }"
+        @click="select(icon.id)"
         class="
           py-3
           px-4
@@ -124,125 +43,59 @@
           hover:text-white hover:bg-indigo-500
           w-16
         "
+        v-for="icon in icons"
+        :key="icon"
       >
-        <HomeIcon class="w-8 h-8 text-red-600" />
-      </li>
-      <li
-        :class="{ 'bg-indigo-500 text-gray-100': item === '2' }"
-        @click="item = '2'"
-        class="
-          py-3
-          px-4
-      
-          border-b-0
-          list-none
-          rounded-sm
-          hover:text-white hover:bg-indigo-500
-          w-16
-        "
-      >
-        <HomeIcon class="w-8 h-8 text-red-600" />
-      </li>
-      <li
-        :class="{ 'bg-indigo-500 text-gray-100': item === '3' }"
-        @click="item = '3'"
-        class="
-          py-3
-          px-4
-     
-          border-b-0
-          list-none
-          rounded-sm
-          hover:text-white hover:bg-indigo-500
-          w-16
-        "
-      >
-        <HomeIcon class="w-8 h-8 text-red-600" />
-      </li>
-      <li
-        :class="{ 'bg-indigo-500 text-gray-100': item === '4' }"
-        @click="item = '4'"
-        class="
-          py-3
-          px-4
-        
-          border-b-0
-          list-none
-          rounded-sm
-          hover:text-white hover:bg-indigo-500
-          w-16
-        "
-      >
-        <HomeIcon class="w-8 h-8 text-red-600" />
-      </li>
-      <li
-        :class="{ 'bg-indigo-500 text-gray-100': item === '5' }"
-        @click="item = '5'"
-        class="
-          py-3
-          px-4
-     
-          border-b-0
-          list-none
-          rounded-sm
-          hover:text-white hover:bg-indigo-500
-          w-16
-        "
-      >
-        <HomeIcon class="w-8 h-8 text-red-600" />
-      </li>
-      <li
-        :class="{ 'bg-indigo-500 text-gray-100': item === '6' }"
-        @click="item = '6'"
-        class="
-          py-3
-          px-4
-         
-          border-b-0
-          list-none
-          rounded-sm
-          hover:text-white hover:bg-indigo-500
-          w-16
-        "
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-8 h-8"
-          viewBox="88.428 12.828 107.543 207.085"
-        >
-          <path
-            fill="#3c5a9a"
-            d="M158.232 219.912v-94.461h31.707l4.747-36.813h-36.454V65.134c0-10.658 2.96-17.922 18.245-17.922l19.494-.009V14.278c-3.373-.447-14.944-1.449-28.406-1.449-28.106 0-47.348 17.155-47.348 48.661v27.149H88.428v36.813h31.788v94.461l38.016-.001z"
-          />
-        </svg>
-      </li>
-      <li
-        :class="{ 'bg-indigo-500 text-gray-100': item === '7' }"
-        @click="item = '7'"
-        class="
-          py-3
-          px-4
-         
-          border-b-0
-          list-none
-          rounded-sm
-          hover:text-white hover:bg-indigo-500
-          w-16
-        "
-      >
-        <div v-html="a"></div>
+        <div>
+          <div class="w-8 h-8" v-html="icon.svg"></div>
+        </div>
       </li>
     </ul>
-    {{ test }}
+
+    <div v-if="searchValue">
+      {{ searchIcons }}
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import { HomeIcon } from "@heroicons/vue/outline";
+import { GET_ICONS } from "~~/gql/icons/getIcons";
+import { useQuery, useMutation } from "@vue/apollo-composable";
+import { SEARCH_ICONS } from "~~/gql/icons/searchIcons";
 const item = ref(0);
 
-const a = ref(
-  '<svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="88.428 12.828 107.543 207.085"><path fill="#3c5a9a" d="M158.232 219.912v-94.461h31.707l4.747-36.813h-36.454V65.134c0-10.658 2.96-17.922 18.245-17.922l19.494-.009V14.278c-3.373-.447-14.944-1.449-28.406-1.449-28.106 0-47.348 17.155-47.348 48.661v27.149H88.428v36.813h31.788v94.461l38.016-.001z"/></svg>'
-);
+const icons = ref("");
+
+const { loading, result, error } = useQuery(GET_ICONS);
+watchEffect(() => {
+  if (result.value) {
+    console.log("result.value", result.value);
+    icons.value = result.value.icons;
+  } else if (error.value) {
+    console.log("error.value", error.value);
+  }
+});
+const emit = defineEmits(["emit-icon"]);
+const select = (id) => {
+  item.value = id;
+  emit("emit-icon", item.value);
+};
+const searchValue = ref("");
+
+const searchIcons = computed(() => {
+  console.log("search", searchValue.value);
+  const { loading, result, error } = useQuery(SEARCH_ICONS, {
+    search: "%" + searchValue.value + "%",
+  });
+  watchEffect(() => {
+    if (result.value) {
+      console.log("result.value", result.value);
+      icons.value = result.value.icons;
+    } else if (error.value) {
+      console.log("error.value", error.value);
+    }
+  });
+});
 </script>
