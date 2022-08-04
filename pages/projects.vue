@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="w-full">
     <div
       class="
         container
@@ -16,7 +16,7 @@
         class="
           flex flex-col
           w-full
-          md:w-[40%] md:border-r-[1px] md:pr-2 md:border-gray-200
+          md:w-[50%] lg:w-[40%] md:border-r-[1px] md:pr-2 md:border-gray-200
         "
       >
         <div class="ml-2 my-4 mr-4 mb-8">
@@ -26,19 +26,18 @@
             name="search"
             class="w-full mr-8 h-12"
             :rounded="true"
-            @emit-input="(n) => (searchValue = (n))"
+            @emit-input="(n) => (searchValue = n)"
           />
-        
         </div>
-        <div class="flex flex-row justify-start w-full ml-4 font-bold">
-          <div class="flex flex-wrap">
+        <div class="flex flex-row justify-around -ml-16 -pl-32 w-full   font-bold">
+          <div class="flex flex-wrap ">
             <div>Name</div>
             <div>
               <ChevronUpIcon @click="sortProjectAsc()" class="w-4 h-4" />
               <ChevronDownIcon @click="sortProjectDesc()" class="w-4 h-4" />
             </div>
           </div>
-          <div class="flex flex-wrap pl-28 md:pl-36">
+          <div class="flex flex-wrap ">
             <div>Description</div>
             <div>
               <ChevronUpIcon @click="sortProjectDAsc()" class="w-4 h-4" />
@@ -50,11 +49,11 @@
         <div v-for="project in projects" :key="project.key">
           <ListsProjectList :projects="project" />
         </div>
-         <div v-if="!projects">
-    <VueSkeleton/>
-    </div>
+        <div v-if="!projects">
+          <VueSkeleton />
+        </div>
       </div>
-      <div class="flex-wrap w-full md:w-[60%]">
+      <div class="flex-wrap w-full md:w-[50%] lg:w-[60%]">
         <div class="w-full">
           <div
             v-if="!showAddForm && !editData.editProject"
@@ -68,7 +67,7 @@
           </div>
           <div
             v-if="!showAddForm && !editData.editProject"
-            class="m-48 hidden md:block"
+            class="my-64 mx-12 lg:m-48 hidden md:block"
           >
             <VueBtn
               @click="showAddForm = true"
@@ -89,9 +88,9 @@
     </div>
 
     {{ test }}
-<div v-if="searchValue">
-{{searchProjects}}
-</div>
+    <div v-if="searchValue">
+      {{ searchProjects }}
+    </div>
   </div>
 </template>
 <script setup>
@@ -104,6 +103,7 @@ import { useQuery, useMutation } from "@vue/apollo-composable";
 import { SORT_PROJECTS_ASC } from "~~/gql/projects/sortProjectsAsc";
 const showAddForm = ref(false);
 const editData = useEditData();
+const loader = ref(false);
 
 const test = computed(() => {
   if (editData.value.editProject && showAddForm.value) {
@@ -125,25 +125,31 @@ watchEffect(() => {
 
 const searchValue = ref("");
 const searchProjects = computed(() => {
+  loader.value = true;
   console.log("search", searchValue.value);
   const { loading, result, error } = useQuery(SEARCH_PROJECTS, {
     search: "%" + searchValue.value + "%",
   });
   watchEffect(() => {
     if (result.value) {
+      loader.value = false;
       console.log("result.value", result.value);
       projects.value = result.value.projects;
     } else if (error.value) {
+      loader.value = false;
       console.log("error.value", error.value);
     }
   });
 });
 
+const {
+  loading: l,
+  result: r,
+  error: e,
+} = useQuery(SEARCH_PROJECTS, {
+  search: "%" + searchValue.value + "%",
+});
 
-  const { loading:l, result:r, error:e } = useQuery(SEARCH_PROJECTS, {
-    search: "%" + searchValue.value + "%",
-  });
- 
 const search = (n) => {
   console.log("search", searchValue.value);
   //searchValue.value = n;
@@ -157,17 +163,6 @@ const search = (n) => {
   });
 };
 
-
-
-
-
-
-
-
-
-
-
-
 const type = ref("");
 
 const {
@@ -180,10 +175,13 @@ const {
   },
 });
 const sortProjectAsc = (type) => {
+  loader.value = true;
   watchEffect(() => {
     if (Tasc_r.value) {
+      loader.value = false;
       projects.value = Tasc_r.value.projects;
     } else if (Tasc_e.value) {
+      loader.value = false;
       console.log("error.value", Tasc_e.value);
     }
   });
@@ -199,10 +197,13 @@ const {
   },
 });
 const sortProjectDesc = (type) => {
+  loader.value = true;
   watchEffect(() => {
     if (Tdesc_r.value) {
+      loader.value = false;
       projects.value = Tdesc_r.value.projects;
     } else if (Tdesc_e.value) {
+      loader.value = false;
       console.log("error.value", Tdesc_e.value);
     }
   });
@@ -218,10 +219,13 @@ const {
   },
 });
 const sortProjectDAsc = () => {
+  loader.value = true;
   watchEffect(() => {
     if (Dasc_r.value) {
+      loader.value = false;
       projects.value = Dasc_r.value.projects;
     } else if (Dasc_e.value) {
+      loader.value = false;
       console.log("error.value", Dasc_e.value);
     }
   });
@@ -236,14 +240,17 @@ const {
   },
 });
 const sortProjectDDesc = () => {
+  loader.value = true;
   watchEffect(() => {
     if (Ddesc_r.value) {
+      loader.value = false;
       projects.value = Ddesc_r.value.projects;
     } else if (Ddesc_e.value) {
+      loader.value = false;
       console.log("error.value", Ddesc_e.value);
     }
   });
 };
 
-definePageMeta({middleware: "navigation-guard"})
+definePageMeta({ middleware: "navigation-guard" });
 </script>

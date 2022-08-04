@@ -40,14 +40,16 @@
             />
           </div>
           
-          <div class="flex flex-row" v-if="layoutState.user">
+          <div class="flex flex-row mr-4" v-if="layoutState.user">
             <img
               :src="layoutState.user.picture"
               class="mx-auto w-8 h-8 rounded-full mr-2"
             />
             <div class="text-gray-200 font-bold justify-center">
               {{layoutState.user.name}}
-              <div class="flex justify-end text-xs">{{getDate}}</div>
+              <div  class="flex justify-end text-xs">
+             {{getDate[0]}} {{getDate[1]}} {{getDate[2]}} {{getDate[3]}}
+              </div>
             </div>
           </div>
         </div>
@@ -68,7 +70,7 @@ const closeSideBar = ref(false);
 var date = new Date();
 const getDate = computed(() => {
   console.log("date", date);
-  return date.toUTCString();
+  return date.toUTCString().split(' ', 4);
 });
 
 

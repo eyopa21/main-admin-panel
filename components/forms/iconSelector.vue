@@ -19,6 +19,7 @@
       classs="w-full h-12"
       class="mb-2"
       @emit-input="(n) => (searchValue = n)"
+     
     />
     <ul
       class="

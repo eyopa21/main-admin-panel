@@ -22,13 +22,15 @@
         mb-1
         transition-all
         duration-150
-        
       "
     >
       <div class="flex flex-row space-x-8">
         <PencilAltIcon v-if="props.icon == 'test'" class="w-6 h-6" />
-        <div >
-        {{ props.name }}
+        <div class="flex flex-row">
+          <VueInnerLoading v-if="props.loader" />
+          <div v-else>
+            {{ props.name }}
+          </div>
         </div>
       </div>
     </button>
@@ -54,5 +56,9 @@ const props = defineProps({
     type: String,
     required: false,
   },
+  loader: {
+    type: Boolean,
+    required: false
+  }
 });
 </script>

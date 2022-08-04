@@ -1,5 +1,8 @@
 <template>
-  <div class="flex flex-col-reverse md:flex-row md:space-x-2">
+  <div
+    v-if="data.description"
+    class="flex flex-col-reverse md:flex-row md:space-x-2"
+  >
     <div class="w-full h-full md:w-1/2">
       <form @submit.prevent="updateContent()">
         <div
@@ -32,10 +35,10 @@
             classs="w-full "
             label="Description"
             :textarea="true"
-             :data="data.description"
+            :data="data.description"
             @emit-input="(n) => (data.description = n)"
           />
-          <VueBtn name="Update" type="submit" class="pt-8" />
+          <VueBtn name="Update" type="submit" class="pt-8" :loader="load"/>
         </div>
       </form>
 
@@ -43,7 +46,16 @@
     </div>
     <div class="w-fullmin-h-full md:w-1/2">
       <div
-        class="flex flex-col bg-bg_color w-full mb-6 shadow-lg rounded-2xl p-8  break-words"
+        class="
+          flex flex-col
+          bg-bg_color
+          w-full
+          mb-6
+          shadow-lg
+          rounded-2xl
+          p-8
+          break-words
+        "
       >
         <div class="flex flex-col">
           <div class="text-3xl md:text-5xl font-bold text-primary mb-12">
@@ -66,24 +78,28 @@ import { UPDATE_HOMEPAGE } from "~~/gql/pages/updateHompage";
 import { useQuery, useMutation } from "@vue/apollo-composable";
 const { handleSubmit } = useForm();
 const layoutState = useLayout();
+const load = ref(false);
 const data = ref({
   header: "",
   description: "",
 });
 const { mutate: update_homePage } = useMutation(UPDATE_HOMEPAGE);
 const updateContent = handleSubmit((formValues) => {
+  load.value = true;
   console.log(formValues);
   update_homePage({
     header: formValues.Header,
     description: formValues.Description,
   })
     .then((res) => {
+      load.value = false;
       console.log("res", res.data);
-            if (process.client) {
+      if (process.client) {
         window.location.reload();
       }
     })
     .catch((err) => {
+      load.value = false;
       console.log("err", err);
       layoutState.value.alert.message = "PLease try again";
       layoutState.value.alert.success = false;

@@ -49,9 +49,9 @@
         <div v-for="timeline in timelines" :key="timeline">
           <ListsTimelineList :timeline="timeline" />
         </div>
-         <div v-if="!timelines">
-    <VueSkeleton/>
-    </div>
+        <div v-if="!timelines">
+          <VueSkeleton />
+        </div>
       </div>
       <div class="flex-wrap w-full md:w-[60%]">
         <div class="w-full">
@@ -103,6 +103,7 @@ import { SEARCH_TIMELINES } from "~~/gql/timeline/searchTimeline";
 import { SORT_TIMELINE } from "~~/gql/timeline/sortTimeline";
 const showAddForm = ref(false);
 const editData = useEditData();
+const loader = ref(false);
 
 const test = computed(() => {
   if (editData.value.editTimeline && showAddForm.value) {
@@ -125,15 +126,18 @@ watchEffect(() => {
 const searchValue = ref("");
 
 const searchTimeline = computed(() => {
+  loader.value = true;
   console.log("search", searchValue.value);
   const { loading, result, error } = useQuery(SEARCH_TIMELINES, {
     search: "%" + searchValue.value + "%",
   });
   watchEffect(() => {
     if (result.value) {
+      loader.value = false;
       console.log("result.value", result.value);
       timelines.value = result.value.timeline;
     } else if (error.value) {
+      loader.value = false;
       console.log("error.value", error.value);
     }
   });
@@ -149,10 +153,13 @@ const {
   },
 });
 const sortTimelinesAsc = (type) => {
+  loader.value = true;
   watchEffect(() => {
     if (Tasc_r.value) {
+      loader.value = false;
       timelines.value = Tasc_r.value.timeline;
     } else if (Tasc_e.value) {
+      loader.value = false;
       console.log("error.value", Tasc_e.value);
     }
   });
@@ -167,10 +174,13 @@ const {
   },
 });
 const sortTimelinesDesc = (type) => {
+  loader.value = true;
   watchEffect(() => {
     if (Tdesc_r.value) {
+      loader.value = false;
       timelines.value = Tdesc_r.value.timeline;
     } else if (Tdesc_e.value) {
+      loader.value = false;
       console.log("error.value", Tdesc_e.value);
     }
   });
@@ -186,10 +196,13 @@ const {
   },
 });
 const sortTimelinesSAsc = () => {
+  loader.value = true;
   watchEffect(() => {
     if (Dasc_r.value) {
+      loader.value = false;
       timelines.value = Dasc_r.value.timeline;
     } else if (Dasc_e.value) {
+      loader.value = false;
       console.log("error.value", Dasc_e.value);
     }
   });
@@ -204,16 +217,17 @@ const {
   },
 });
 const sortTimelinesSDesc = () => {
+  loader.value = true;
   watchEffect(() => {
     if (Ddesc_r.value) {
+      loader.value = false;
       timelines.value = Ddesc_r.value.timeline;
     } else if (Ddesc_e.value) {
+      loader.value = false;
       console.log("error.value", Ddesc_e.value);
     }
   });
 };
 
-
-
-definePageMeta({middleware: "navigation-guard"})
+definePageMeta({ middleware: "navigation-guard" });
 </script>

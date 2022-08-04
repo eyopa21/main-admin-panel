@@ -3,7 +3,7 @@
     <div class="flex flex-col md:flex-row">
       <div
         :class="showAddForm || editData.editLinks ? 'hidden md:block' : ''"
-        class="flex flex-col w-full md:w-[40%] md:border-r-[1px]"
+        class="flex flex-col w-full md:w-[40%] md:border-r-[1px] mr-2"
       >
         <div v-for="(link, key) in links" :key="key">
           <ListsLinksLists :link="link" />

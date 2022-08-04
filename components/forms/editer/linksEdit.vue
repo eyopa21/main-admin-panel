@@ -79,7 +79,7 @@
           />
 
           <div class="mt-6 flex flex-row space-x-2">
-            <VueBtn name="Update" type="submit" />
+            <VueBtn name="Update" type="submit" :loader="load"/>
           </div>
         </form>
       </div>
@@ -98,9 +98,11 @@ const { handleSubmit } = useForm();
 const router = useRouter();
 const editData = useEditData();
 const showForm = ref(false);
+const load = ref(false)
 
 const { mutate: update_links } = useMutation(UPDATE_LINKS);
 const update = handleSubmit((formValues) => {
+  load.value = true;
   console.log(formValues);
 
   update_links({
@@ -109,12 +111,14 @@ const update = handleSubmit((formValues) => {
     value: formValues.Value,
   })
     .then((res) => {
+      load.value = false;
       console.log("res", res.data);
       if (process.client) {
         window.location.reload();
       }
     })
     .catch((err) => {
+      load.value = false;
       console.log("err", err);
       layoutState.value.alert.message = "PLease try again";
       layoutState.value.alert.success = false;
@@ -127,6 +131,7 @@ const discard = () => {
 
 const { mutate: delete_links } = useMutation(DELETE_LINKS);
 const deleteLinks = (links) => {
+  load.value = true;
   var value = prompt(
     `This Action cannot be undone, PLease type ${links.name} to delete`
   );
@@ -135,11 +140,15 @@ const deleteLinks = (links) => {
       id: links.id,
     })
       .then((res) => {
+        load.value = false;
         if (process.client) {
           window.location.reload();
         }
       })
       .catch((err) => {
+        load.value = true;
+        layoutState.value.alert.message = "PLease try again";
+      layoutState.value.alert.success = false;
         console.log(err.message);
       });
   }

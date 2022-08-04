@@ -11,7 +11,7 @@
           bg-gray-200
           w-full
           md:w-full
-          h-32
+          h-auto
           p-4
           shadow-lg
           rounded-xl
@@ -32,7 +32,9 @@
           {{ percent }}%
           <ArrowSmDownIcon v-if="difference < 0" class="w-6 h-6 text-red-400" />
           <ArrowSmUpIcon v-if="difference > 0" class="w-6 h-6 text-green-500" />
+          <div class="">
           form last month
+          </div>
         </div>
       </div>
     </div>
@@ -163,7 +165,7 @@ const getData = computed(() => {
 });
 
 const chartData = computed(() => ({
-  label: "eyoba",
+
   labels: [
     "Jan",
     "Feb",
@@ -180,6 +182,7 @@ const chartData = computed(() => ({
   ],
   datasets: [
     {
+      label: "scale 1:1",
       data: data.value,
       backgroundColor: [
         "#77CEFF",

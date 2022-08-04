@@ -95,7 +95,7 @@
         </div>
 
         <div class="mt-6 flex flex-row space-x-2">
-          <VueBtn name="Add" type="submit" />
+          <VueBtn name="Add" type="submit" :loader="load"/>
 
           <button
             class="
@@ -143,12 +143,14 @@ const image = ref();
 const url = ref("");
 const base64 = ref("");
 const skills = ref([]);
+const load = ref(false);
 
 const { mutate: store_image } = useMutation(STORE_IMAGE);
 const { mutate: add_projects } = useMutation(ADD_PROJECTS);
 const { mutate: add_project_skill } = useMutation(ADD_SKILL_PROJECT);
 
 const add = handleSubmit((formValues) => {
+   load.value = true;
   console.log(formValues);
   console.log("ski", skills.value);
 
@@ -170,6 +172,7 @@ const add = handleSubmit((formValues) => {
               skill_id: skills.value[skill].id,
             })
               .then((res) => {
+                 load.value = false;
                 console.log("err", res.data);
                 layoutState.value.alert.message = "project added successfully";
                 if (process.client) {
@@ -178,16 +181,21 @@ const add = handleSubmit((formValues) => {
               })
               .catch((err) => {
                 console.log("err", err.message);
+                 load.value = false;
+                 layoutState.value.alert.message = "PLease try again";
+                 layoutState.value.alert.success = false;
               });
           }
         })
         .catch((err) => {
+           load.value = false;
           console.log("err", err);
           layoutState.value.alert.message = "PLease try again";
           layoutState.value.alert.success = false;
         });
     })
     .catch((err) => {
+       load.value = false;
       console.log("err", err);
       layoutState.value.alert.message = "PLease try again";
       layoutState.value.alert.success = false;

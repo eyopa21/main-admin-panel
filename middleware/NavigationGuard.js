@@ -7,7 +7,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
             //return abortNavigation()
         return navigateTo('/')
     } //else if (to.fullPath === '/' || !cookie.value || to.fullPath === '/content' && !cookie.value || to.fullPath === '/projects' && !cookie.value || to.fullPath === '/skills' && !cookie.value || to.fullPath === '/timeline' && !cookie.value || to.fullPath === '/settings' && !cookie.value || to.fullPath === '/settings/general' && !cookie.value) {
-    if (((to.fullPath === '/') || (to.fullPath === '/content') || (to.fullPath === '/projects') || (to.fullPath === '/skills') || (to.fullPath === '/timeline') || (to.fullPath === '/settings') || (to.fullPath === '/setting/general')) && !cookie.value) {
+    if (((to.fullPath === '/') || (to.fullPath === '/content') || (to.fullPath === '/projects') || (to.fullPath === '/skills') || (to.fullPath === '/timeline') || (to.fullPath === '/settings') || (to.fullPath === '/setting/general') || (to.fullPath === '/setting/general/invite') || (to.fullPath === '/setting/general/change')) && !cookie.value) {
         return navigateTo('/login')
             //return abortNavigation()
     }

@@ -2,9 +2,13 @@
   <div class="bg-gray-300">
     <div
       class="fixed w-full top-0 left-0 z-20"
-      :class="[$route.fullPath == '/login' || $route.fullPath == '/loginwithcode'  ? 'hidden' : 'block']"
+      :class="[
+        $route.fullPath == '/login' || $route.fullPath == '/loginwithcode'
+          ? 'hidden'
+          : 'block',
+      ]"
     >
-      <NavBarHeader @resize="onResize()" />
+      <NavBarHeader class="w-full" @resize="onResize()" />
       <NavBarNavbarCollapsed
         v-if="!layoutState.showSideBar && !layoutState.closeSidebar"
         @click="close()"
@@ -16,15 +20,13 @@
         v-if="layoutState.showSideBar"
       />
     </div>
-<VueModal />
-<VueConfirm/>
-<PreviewModal/>
-<div>
-<VueAlert  v-if="layoutState.alert.message"/>
-</div>
-    <slot />
-    
-
+    <VueModal />
+    <VueConfirm />
+    <PreviewModal />
+    <div>
+      <VueAlert v-if="layoutState.alert.message" />
+    </div>
+    <slot class="w-full"/>
   </div>
 </template>
 <script setup>
@@ -48,7 +50,4 @@ const onResize = () => {
 if (process.client) {
   window.addEventListener("resize", onResize);
 }
-
-
-
 </script>

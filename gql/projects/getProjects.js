@@ -2,7 +2,7 @@ import { gql } from "@apollo/client/core";
 
 export const GET_PROJECTS = gql `
   query projects {
-    projects {
+    projects(order_by: {id: asc}) {
       id
       title
       subtitle

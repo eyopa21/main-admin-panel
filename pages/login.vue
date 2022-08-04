@@ -53,26 +53,26 @@
               />
 
               <div class="ml-1 -pt-4">
-                <NuxtLink >
-                  <VueBtn name="Login" type="submit" />
+                <NuxtLink>
+                  <VueBtn name="Login" type="submit" :loader="load"/>
                 </NuxtLink>
               </div>
             </div>
 
             <div class="flex flex-row justify-between -ml-2 space-x-8">
-            <NuxtLink to="/loginwithcode">
-              <button
-                class="
-                  w-full
-                  text-center
-                  font-medium
-                  text-gray-500
-                  hover:underline
-                "
-              >
-                Login via invite link
-              </button>
-            </NuxtLink>
+              <NuxtLink to="/loginwithcode">
+                <button
+                  class="
+                    w-full
+                    text-center
+                    font-medium
+                    text-gray-500
+                    hover:underline
+                  "
+                >
+                  Login via invite link
+                </button>
+              </NuxtLink>
               <button
                 type="button"
                 class="
@@ -108,34 +108,34 @@ import {
 import { GET_POSTS } from "../gql/test.js";
 import { gql } from "@apollo/client/core";
 import { LOGIN } from "~~/gql/login.js";
-const { handleSubmit } = useForm();
+const { handleSubmit, resetForm } = useForm();
 const layoutState = useLayout();
-const cookie = useCookie('isLoggedIn')
-const admin = useCookie('admin');
-const router = useRouter()
+const cookie = useCookie("isLoggedIn");
+const admin = useCookie("admin");
+const router = useRouter();
+const load = ref(false);
 
 const { mutate: register } = useMutation(LOGIN);
 const login = handleSubmit((formValues) => {
+  load.value = true;
   console.log(formValues);
-  
-  
-  register({ email: formValues.email, password: formValues.password})
+
+  register({ email: formValues.email, password: formValues.password })
     .then((res) => {
+      load.value = false;
       console.log("res", res.data);
       cookie.value = true;
-      admin.value =  true;
-      router.push('/')
+      admin.value = true;
+      router.push("/");
     })
     .catch((err) => {
+      load.value = false;
       console.log("err", err);
       layoutState.value.alert.message = "User not found";
       layoutState.value.alert.success = false;
-
+      resetForm();
     });
 });
 
-definePageMeta({middleware: "navigation-guard"})
-
-
-
+definePageMeta({ middleware: "navigation-guard" });
 </script>

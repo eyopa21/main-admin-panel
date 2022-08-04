@@ -2,7 +2,7 @@ import { gql } from "@apollo/client/core";
 
 export const GET_SKILLS = gql `
   query skills {
-    skills {
+    skills(order_by: {id: asc}) {
       id
       skill_name
       level

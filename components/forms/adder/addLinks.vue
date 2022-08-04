@@ -36,7 +36,7 @@
         />
 
         <div class="mt-6 flex flex-row space-x-2">
-          <VueBtn name="Add" type="submit" />
+          <VueBtn name="Add" type="submit" :loader="load"/>
           <button
             class="
               text-red-500
@@ -73,9 +73,11 @@ const router = useRouter();
 const { handleSubmit } = useForm();
 
 const icon = ref("");
+const load = ref(false)
 
 const { mutate: add_links } = useMutation(ADD_LINKS);
 const add = handleSubmit((formValues) => {
+  load.value = true;
   console.log(formValues);
   add_links({
     icon: icon.value,
@@ -83,11 +85,13 @@ const add = handleSubmit((formValues) => {
     value: formValues.Value,
   })
     .then((res) => {
+      load.value = false;
        if (process.client) {
             window.location.reload();
           }
     })
     .catch((err) => {
+      load.value = false;
       console.log("err", err);
       layoutState.value.alert.message = "PLease try again";
       layoutState.value.alert.success = false;

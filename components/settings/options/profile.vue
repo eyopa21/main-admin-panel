@@ -26,7 +26,7 @@
                     :src="data.picture"
                     alt="profile pic"
                   />
-                   <img
+                  <img
                     v-if="url"
                     class="w-20 h-20 md:w-36 md:h-36 rounded-full object-fit"
                     :src="url"
@@ -73,7 +73,7 @@
               classs="w-full h-12"
               class="w-1/2"
               :data="data.logo"
-               label="Logo Name"
+              label="Logo Name"
               :astrix="true"
             />
           </div>
@@ -84,16 +84,15 @@
             rule="required"
             classs="w-full h-12"
             :data="data.location"
-             label="Location"
-              :astrix="true"
+            label="Location"
+            :astrix="true"
           />
         </div>
         <div class="m-8">
-          <VueBtn name="Update" type="submit" />
+          <VueBtn name="Update" type="submit" :loader="load" />
         </div>
       </form>
     </div>
-    
   </div>
 </template>
 
@@ -107,42 +106,71 @@ import { STORE_IMAGE } from "~~/gql/storeImage";
 import { useQuery, useMutation } from "@vue/apollo-composable";
 const { handleSubmit } = useForm();
 const base64 = ref("");
+const load = ref(false);
+const image = ref();
+const data = ref("");
+const url = ref("");
 const layoutState = useLayout();
 const { mutate: store_image } = useMutation(STORE_IMAGE);
 
 const { mutate: update_user } = useMutation(UPDATE_USER);
 const update = handleSubmit((formValues) => {
+  load.value = true;
   console.log(formValues);
-
-  store_image({ base64: base64.value })
-    .then((res) => {
-        console.log("res.data.storeImage.url", res.data.storeImage.url)
-      update_user({
-        id: data.value.id,
-        logo: formValues.Logo,
-        name: formValues.Name,
-        picture: res.data.storeImage.url,
-        location: formValues.Location,
-      })
-        .then((res) => {
-            if (process.client) {
-            window.location.reload();
-          }
+  if (base64.value) {
+    store_image({ base64: base64.value })
+      .then((res) => {
+        console.log("res.data.storeImage.url", res.data.storeImage.url);
+        update_user({
+          id: data.value.id,
+          logo: formValues.Logo,
+          name: formValues.Name,
+          picture: res.data.storeImage.url,
+          location: formValues.Location,
         })
-        .catch((err) => {
-          console.log("err", err);
-          layoutState.value.alert.message = "PLease try again";
-          layoutState.value.alert.success = false;
-        });
+          .then((res) => {
+            load.value = false;
+            if (process.client) {
+              window.location.reload();
+            }
+          })
+          .catch((err) => {
+            load.value = false;
+            console.log("err", err);
+            layoutState.value.alert.message = "PLease try again";
+            layoutState.value.alert.success = false;
+          });
+      })
+      .catch((err) => {
+        load.value = false;
+        layoutState.value.alert.message = "PLease try again";
+        layoutState.value.alert.success = false;
+        console.log("Err", err.message);
+      });
+  } else {
+    update_user({
+      id: data.value.id,
+      logo: formValues.Logo,
+      name: formValues.Name,
+      picture: data.value.picture,
+      location: formValues.Location,
     })
-    .catch((err) => {
-      console.log("Err", err.message);
-    });
+      .then((res) => {
+        load.value = false;
+        if (process.client) {
+          window.location.reload();
+        }
+      })
+      .catch((err) => {
+        load.value = false;
+        console.log("err", err);
+        layoutState.value.alert.message = "PLease try again";
+        layoutState.value.alert.success = false;
+      });
+  }
 });
 
-const image = ref();
-const data = ref("");
-const url = ref('');
+
 
 const selectImage = () => {
   var input = document.createElement("input");
@@ -161,19 +189,13 @@ const selectImage = () => {
   };
 };
 
-
-
-
 const { loading, result, error } = useQuery(GET_USER);
 watchEffect(() => {
   if (result.value) {
     console.log("result.value user", result.value);
     data.value = result.value.user[0];
-    
   } else if (error.value) {
     console.log("error.value", error.value);
   }
 });
-
-
 </script>

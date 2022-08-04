@@ -71,9 +71,14 @@
           {{ editData.editProject.description }}
         </div>
         <div class="flex flex-row text-xs pt-8">
-          <div class="mr-2">created at: {{editData.editProject.created_at.split('T', 1)}}</div>
+          <div class="mr-2">
+            created at: {{ editData.editProject.created_at.split("T", 1)[0] }}
+          </div>
           |
-          <div class="ml-2">Last update on: {{editData.editProject.updated_at.split('T', 1)}}</div>
+          <div class="ml-2">
+            Last update on:
+            {{ editData.editProject.updated_at.split("T", 1)[0] }}
+          </div>
         </div>
       </div>
       <form class="pr-2" v-if="showForm" @submit.prevent="add()">
@@ -150,7 +155,7 @@
         </div>
 
         <div class="mt-6 flex flex-row space-x-2">
-          <VueBtn name="Update" type="submit" />
+          <VueBtn name="Update" type="submit" :loader="load" />
           <VueBtn @click="preview()" name="Preview" type="button" />
         </div>
       </form>
@@ -174,6 +179,7 @@ const layoutState = useLayout();
 const router = useRouter();
 const showForm = ref(false);
 const editData = useEditData();
+const load = ref(false);
 
 const base64 = ref("");
 const editForm = ref({
@@ -191,6 +197,7 @@ const { mutate: store_image } = useMutation(STORE_IMAGE);
 const { mutate: add_project_skill } = useMutation(ADD_SKILL_PROJECT);
 
 const add = handleSubmit((formValues) => {
+  load.value = true;
   console.log(formValues);
   console.log("skills", editForm.value.skills);
   console.log("skills", editForm.value.image);
@@ -220,25 +227,29 @@ const add = handleSubmit((formValues) => {
                   console.log("err", res.data);
                   layoutState.value.alert.message =
                     "project updated successfully";
-                  if (process.client) {
-                    window.location.reload();
-                  }
                 })
                 .catch((err) => {
+                  load.value = false;
                   console.log("err", err.message);
                   layoutState.value.alert.message =
                     "project updating not successfull";
                   layoutState.value.alert.success = false;
                 });
+              load.value = false;
+              if (process.client) {
+                window.location.reload();
+              }
             }
           })
           .catch((err) => {
+            load.value = false;
             console.log("err", err);
             layoutState.value.alert.message = "PLease try again";
             layoutState.value.alert.success = false;
           });
       })
       .catch((err) => {
+        load.value = false;
         console.log("err", err);
         layoutState.value.alert.message = "PLease try again";
         layoutState.value.alert.success = false;
@@ -253,6 +264,7 @@ const add = handleSubmit((formValues) => {
       pricture: editData.value.editProject.pricture,
     })
       .then((res) => {
+        load.value = false;
         console.log("res", res.data);
         delete_project_skill({
           project_id: editData.value.editProject.id,
@@ -267,9 +279,6 @@ const add = handleSubmit((formValues) => {
                   console.log("err", res.data);
                   layoutState.value.alert.message =
                     "project updated successfully";
-                  if (process.client) {
-                    window.location.reload();
-                  }
                 })
                 .catch((err) => {
                   console.log("err", err.message);
@@ -278,8 +287,15 @@ const add = handleSubmit((formValues) => {
                   layoutState.value.alert.success = false;
                 });
             }
+            if (process.client) {
+              window.location.reload();
+            }
+            load.value = false;
           })
           .catch((err) => {
+            load.value = false;
+            layoutState.value.alert.message = "PLease try again";
+            layoutState.value.alert.success = false;
             console.log(err, "errrrrr");
           });
       })
@@ -321,7 +337,7 @@ const { mutate: delete_project } = useMutation(DELETE_PROJECTS);
 const { mutate: delete_project_skill } = useMutation(DELETE_PROJECT_SKILL);
 const deleteProject = () => {
   var value = prompt(
-    `This Action cannot be undone, PLease type ${editData.value.editProject.title} to delete`
+    `This Action cannot be undone, PLease type  "${editData.value.editProject.title}" to delete`
   );
   if (value == editData.value.editProject.title) {
     delete_project_skill({

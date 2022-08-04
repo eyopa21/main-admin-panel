@@ -54,7 +54,7 @@
 
               <div class="ml-1 -pt-4">
                 <NuxtLink>
-                  <VueBtn name="Login" type="submit" />
+                  <VueBtn name="Login" type="submit" :loader="load"/>
                 </NuxtLink>
               </div>
             </div>
@@ -100,18 +100,22 @@ const { handleSubmit } = useForm();
 const layoutState = useLayout();
 const cookie = useCookie("isLoggedIn");
 const router = useRouter();
+const load = ref(false);
 
 const { mutate: login_with_code } = useMutation(LOGIN_VIA_CODE);
 const login = handleSubmit((formValues) => {
+    load.value = true;
   console.log(formValues);
 
   login_with_code({ email: formValues.email, code: formValues.code })
     .then((res) => {
+        load.value = false;
       console.log("res", res.data);
       cookie.value = true;
       router.push("/");
     })
     .catch((err) => {
+        load.value = false;
       console.log("err", err);
       layoutState.value.alert.message = "User not found";
       layoutState.value.alert.success = false;

@@ -56,6 +56,17 @@
       </div>
     </form>
   </div>
+    <div v-else class="flex flex-col
+      drop-shadow-md
+      md:rounded-xl
+      bg-white
+      min-h-screen
+      md:min-h-full md:p-8
+      w-full">
+  
+    <div class="text-4xl md:text-5xl">This is page is not allowed for you</div>
+
+  </div>
 </template>
 <script setup>
 import { useForm } from "vee-validate";
@@ -63,10 +74,12 @@ import { useQuery, useMutation } from "@vue/apollo-composable";
 import { CHANGE_PASSWORD } from "~~/gql/changePassword";
 const { handleSubmit, resetForm } = useForm();
 const layoutState = useLayout();
+const load = ref(false);
 
 const admin = useCookie("admin");
 const { mutate: change_password } = useMutation(CHANGE_PASSWORD);
 const change = handleSubmit((formValues) => {
+    load.value = true;
   console.log(formValues);
 
   if (formValues.Old_password == layoutState.value.user.password) {
@@ -75,10 +88,12 @@ const change = handleSubmit((formValues) => {
       id: layoutState.value.user.id,
     })
       .then((res) => {
+        load.value = false;
         layoutState.value.alert.message = "Change password successfull";
         resetForm();
       })
       .catch((err) => {
+        load.value = false;
         console.log("err", err);
         layoutState.value.alert.message = "Please try again";
         layoutState.value.alert.success = false;

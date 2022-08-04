@@ -6,7 +6,7 @@
       class="
         bg-transparent
         hover:bg-emeraled-100
-        text-blue-dark
+        
         font-semibold
         hover:text-emerald-500
         py-0

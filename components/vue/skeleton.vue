@@ -1,15 +1,11 @@
 <template>
   <div>
     <div
-      role="status"
       class="
         p-4
         space-y-4
-        max-w-md
         rounded
-       
         divide-y divide-gray-200
-        
         animate-pulse
         dark:divide-gray-700
         md:p-6
@@ -61,7 +57,7 @@
         </div>
         <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
       </div>
-            <div class="flex justify-between items-center">
+      <div class="flex justify-between items-center">
         <div>
           <div
             class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"
@@ -70,7 +66,7 @@
         </div>
         <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div>
       </div>
-            <div class="flex justify-between items-center">
+      <div class="flex justify-between items-center">
         <div>
           <div
             class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"

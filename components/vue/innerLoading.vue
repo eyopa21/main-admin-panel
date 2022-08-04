@@ -1,11 +1,6 @@
 <template>
   <div>
-    <h1 class="text-7xl m-32" @click="layoutState.showModal = true">test</h1>
-
-    <VueSearch />
-    <VueConfirm />
-
-    <div class="m-64">
+    <div>
       <div
         class="
           inline-block
@@ -16,7 +11,6 @@
           animate-spin
         "
       ></div>
-      />
     </div>
   </div>
 </template>

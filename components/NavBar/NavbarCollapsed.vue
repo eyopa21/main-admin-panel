@@ -131,7 +131,7 @@
                         transition-colors
                         duration-200
                       "
-                      :class="[$route.fullPath == '/settings' ? ' w-12 h-12' : 'h-6 w-6']"
+                      :class="[$route.fullPath == '/settings' || $route.fullPath == '/settings/general' || $route.fullPath == '/settings/general/invite' || $route.fullPath == '/settings/general/change' || $route.fullPath == '/settings/sociallinks'  ? ' w-12 h-12' : 'h-6 w-6']"
                     />
                   </span>
                 </NuxtLink>

@@ -38,7 +38,7 @@
           />
 
           <div class="mt-6 flex flex-row space-x-2">
-            <VueBtn name="Add" type="submit" />
+            <VueBtn name="Add" type="submit" :loader="load"/>
             <button
               class="
                 text-red-500
@@ -75,11 +75,13 @@ import { useQuery, useMutation } from "@vue/apollo-composable";
 const { handleSubmit } = useForm();
 const router = useRouter();
 const layoutState = useLayout()
+const load = ref(false);
 
 
   const { mutate: add_timeline } = useMutation(ADD_TIMELINE);
 const add = handleSubmit((formValues) => {
   console.log(formValues);
+  load.value = true;
 
   add_timeline({
     title: formValues.Incident,
@@ -88,11 +90,13 @@ const add = handleSubmit((formValues) => {
   })
     .then((res) => {
       console.log("res", res.data);
+       load.value = false;
         if (process.client) {
             window.location.reload();
           }
     })
     .catch((err) => {
+       load.value = false;
       console.log("err", err);
       layoutState.value.alert.message = "PLease try again";
       layoutState.value.alert.success = false;

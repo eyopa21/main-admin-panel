@@ -51,7 +51,7 @@
             class="w-full"
           />
           <div class="flex flex-row">
-            <VueBtn name="Invite" type="submit" class="mt-4" />
+            <VueBtn name="Invite" type="submit" class="mt-4" :loader="load"/>
             <button
               class="
                 text-red-500
@@ -80,6 +80,17 @@
       </form>
     </div>
   </div>
+  <div v-else class="flex flex-col
+      drop-shadow-md
+      md:rounded-xl
+      bg-white
+      min-h-screen
+      md:min-h-full md:p-8
+      w-full">
+  
+    <div class="text-4xl md:text-5xl">This is page is not allowed for you</div>
+
+  </div>
 </template>
 
 <script setup>
@@ -87,31 +98,34 @@ import { ref } from "vue";
 import { useForm } from "vee-validate";
 import { GET_INVITES } from "~~/gql/inviites/getInvites";
 import { INVITE_USER } from "~~/gql/inviites/addInvites";
-import { DELETE_INVITES } from "~~/gql/inviites/deleteInvites";
-
 
 import { useQuery, useMutation } from "@vue/apollo-composable";
 const showForm = ref(false);
 const layoutState = useLayout();
 const admin = useCookie("admin");
+const load = ref(false);
 
 const { mutate: invite_user } = useMutation(INVITE_USER);
 const { handleSubmit } = useForm();
 const invite = handleSubmit((formValues) => {
+  load.value = true;
   console.log(formValues);
 
   invite_user({
     email: formValues.Email,
   })
     .then((res) => {
+      load.value = false;
       if (process.client) {
         window.location.reload();
       }
     })
     .catch((err) => {
+      load.value = false;
       console.log("err", err.status);
       if (
-        err.message ==='Uniqueness violation. duplicate key value violates unique constraint "invites_email_key"'
+        err.message ===
+        'Uniqueness violation. duplicate key value violates unique constraint "invites_email_key"'
       ) {
         layoutState.value.alert.message = "The user has already invited";
         layoutState.value.alert.success = false;
@@ -132,24 +146,4 @@ watchEffect(() => {
     console.log("error.value", error.value);
   }
 });
-
-
-
-const { mutate: delete_Invites } = useMutation(DELETE_INVITES);
-
-const deleteLinks = (id) => {
-  delete_links({
-    id: id,
-  })
-    .then((res) => {
-      if (process.client) {
-        window.location.reload();
-      }
-    })
-    .catch((err) => {
-      console.log(err.message);
-    });
-};
-
-
 </script>

@@ -143,6 +143,7 @@ const forgetPassword = handleSubmit((formValues) => {
       layoutState.value.alert.message =
         "We have send your password to your email";
       layoutState.value.showModal = false;
+      layoutState.value.alert.success = true;
       resetForm();
     })
     .catch((err) => {

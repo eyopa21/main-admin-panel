@@ -51,9 +51,14 @@
       </div>
       <div>
         <div class="flex flex-row justify-end text-xs pt-8">
-          <div class="mr-2 font-light">created at: {{editData.editTimeline.created_at.split('T', 1)}}</div>
+          <div class="mr-2 font-light">
+            created at: {{ editData.editTimeline.created_at.split("T", 1)[0] }}
+          </div>
           |
-          <div class="ml-2 font-light">Last update on: {{editData.editTimeline.updated_at.split('T', 1)}}</div>
+          <div class="ml-2 font-light">
+            Last update on:
+            {{ editData.editTimeline.updated_at.split("T", 1)[0] }}
+          </div>
         </div>
       </div>
       <hr />
@@ -85,13 +90,13 @@
           />
 
           <div class="mt-6 flex flex-row space-x-2">
-            <VueBtn name="Update" type="submit" />
-            <VueBtn
+            <VueBtn name="Update" type="submit" :loader="load" />
+            <!--VueBtn
               @click="discard()"
               name="Discard"
               type="button"
               classs="bg-red-400 hover:bg-red-500 active:bg-red-600"
-            />
+            /-->
           </div>
         </form>
       </div>
@@ -110,9 +115,11 @@ const router = useRouter();
 const editData = useEditData();
 const showForm = ref(false);
 const layoutState = useLayout();
+const load = ref(false);
 
 const { mutate: update_timeline } = useMutation(UPDATE_TIMELINE);
 const update = handleSubmit((formValues) => {
+  load.value = true;
   console.log(formValues);
 
   update_timeline({
@@ -122,12 +129,14 @@ const update = handleSubmit((formValues) => {
     description: formValues.Year,
   })
     .then((res) => {
+      load.value = false;
       console.log("res", res.data);
       if (process.client) {
         window.location.reload();
       }
     })
     .catch((err) => {
+      load.value = false;
       console.log("err", err);
       layoutState.value.alert.message = "PLease try again";
       layoutState.value.alert.success = false;
@@ -147,8 +156,12 @@ const discard = () => {
 const { mutate: delete_timeline } = useMutation(DELETE_TIMELINE);
 
 const deleteTimeline = (timeline) => {
+    const test = ref(timeline.title)
+    test.value.toString();
+    console.log(test.value.bold())
+    
   var value = prompt(
-    `This Action cannot be undone, PLease type ${timeline.title.toUpperCase()} to delete`
+    `This Action cannot be undone, PLease type  "${timeline.title}"  to delete`
   );
   if (value == timeline.title) {
     delete_timeline({
