@@ -149,6 +149,8 @@ const difference = ref(0);
 const percent = ref(0);
 
 const d = new Date();
+console.log("month", d.getMonth())
+console.log("date", d.getDate())
 
 const data = ref([]);
 

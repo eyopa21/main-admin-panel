@@ -88,7 +88,7 @@
     </div>
 
     {{ test }}
-    <div v-if="searchValue">
+    <div>
       {{ searchTimeline }}
     </div>
   </div>

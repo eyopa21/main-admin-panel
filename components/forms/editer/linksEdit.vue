@@ -9,7 +9,7 @@
         w-full
         md:mb-6
         shadow-lg
-        md:rounded-2xl
+         md:rounded-lg
         p-2
         md:p-8
         pt-4

@@ -88,8 +88,9 @@
                   items-center
                   p-2
                   pl-2
-                  border-transparent border-l-2 border-teal-600
+                  border-transparent border-teal-600
                 "
+                :class="test[key] == true ? 'border-l-2' : ''"
               >
                 <div class="w-full items-center flex">
                   <div class="mx-2 text-sm">
@@ -106,13 +107,10 @@
 </template>
 
 <script setup>
+import { onMounted } from "vue";
 import { XIcon } from "@heroicons/vue/outline";
 import { ref } from "vue";
-import {
-  
-  useQuery,
-  useMutation,
-} from "@vue/apollo-composable";
+import { useQuery, useMutation } from "@vue/apollo-composable";
 import { GET_SKILLS } from "~~/gql/skills/skills";
 const emit = defineEmits(["emit-skills"]);
 const props = defineProps({
@@ -121,39 +119,44 @@ const props = defineProps({
     required: true,
   },
 });
+onMounted(() => {
+  for (let i in props.skills) {
+    console.log("i", );
+  }
+  console.log("test")
+});
 //console.log("chip", props.skills)
 
-const skills = ref('')
+const skills = ref("");
 
-  const { loading, result, error } = useQuery(GET_SKILLS);
-  watchEffect(() => {
-    if (result.value) {
-      console.log("result.value", result.value);
-      skills.value = result.value.skills
-    } else if (error.value) {
-      console.log("error.value", error.value);
-    }
-
-
-  })
-
-
+const { loading, result, error } = useQuery(GET_SKILLS);
+watchEffect(() => {
+  if (result.value) {
+    console.log("result.value", result.value);
+    skills.value = result.value.skills;
+  } else if (error.value) {
+    console.log("error.value", error.value);
+  }
+});
+const test = ref([]);
 const selected = ref([]);
-let selectednames = ref([])
+let selectednames = ref([]);
 for (var i in props.skills) {
   selected.value.push(props.skills[i].skill);
-  selectednames.value.push(props.skills[i].skill.skill_name)
+  selectednames.value.push(props.skills[i].skill.skill_name);
 }
 //console.log("selectedvalue", selected.value)
 //console.log("names", selectednames.value)
 
 emit("emit-skills", selected.value);
-const test = ref(false);
 const select = (skill, key) => {
-    console.log("skillllll", skill)
-  if (selectednames.value.includes(skill.skill_name) || selected.value.includes(skill)) {
+  //console.log("skillllll", skill);
+  if (
+    selectednames.value.includes(skill.skill_name) ||
+    selected.value.includes(skill)
+  ) {
     console.log("already selectd");
-    test.value = true;
+    test.value[key] = true;
   } else {
     selected.value.push(skill);
     emit("emit-skills", selected.value);
@@ -167,13 +170,5 @@ const unSelect = (id) => {
 </script>
 
 <style>
-.top-100 {
-  top: 100%;
-}
-.bottom-100 {
-  bottom: 100%;
-}
-.max-h-select {
-  max-height: 300px;
-}
+
 </style>

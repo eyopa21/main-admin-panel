@@ -9,7 +9,7 @@
         w-full
         md:mb-6
         shadow-lg
-        md:rounded-2xl
+        md:rounded-lg
         p-2
         md:p-8
         pt-4
@@ -47,14 +47,14 @@
             </div>
             <div class="w-full">
               <img
-                class="rounded-xl border border-gray-200 h-32 w-full md:h-48"
+                class="rounded border border-gray-200 h-32 w-full sm:h-60"
                 :src="editData.editProject.pricture"
                 alt=""
               />
             </div>
           </div>
 
-          <div class="w-[40%] h-8 pt-20 grid gap-2 grid-cols-2 ml-2">
+          <div class="w-[40%] md:mt-4 lg:mt-0 h-8 pt-20 grid gap-2 grid-cols-2 ml-2">
             <div
               v-for="skill in editData.editProject.project_skills"
               :key="skill"
@@ -74,7 +74,9 @@
           <div class="mr-2">
             created at: {{ editData.editProject.created_at.split("T", 1)[0] }}
           </div>
+          <div class="font-bold">
           |
+          </div>
           <div class="ml-2">
             Last update on:
             {{ editData.editProject.updated_at.split("T", 1)[0] }}
@@ -88,7 +90,7 @@
               class="
                 h-32
                 md:h-48
-                object-fill
+                object-cover
                 rounded
                 border border-gray-200
                 w-full

@@ -16,7 +16,9 @@
         class="
           flex flex-col
           w-full
-          md:w-[50%] lg:w-[40%] md:border-r-[1px] md:pr-2 md:border-gray-200
+          md:w-[50%]
+          lg:w-[40%]
+          md:border-r-[1px] md:pr-2 md:border-gray-200
         "
       >
         <div class="ml-2 my-4 mr-4 mb-8">
@@ -29,7 +31,18 @@
             @emit-input="(n) => (searchValue = n)"
           />
         </div>
-        <div v-if="skills" class="flex flex-row space-x-32 sm:space-x-48 md:space-x-32 ml-8 w-auto  font-bold">
+        <div
+          v-if="skills"
+          class="
+            flex flex-row
+            space-x-32
+            sm:space-x-48
+            md:space-x-32
+            ml-8
+            w-auto
+            font-bold
+          "
+        >
           <div class="flex flex-wrap">
             <div>Name</div>
             <div>
@@ -46,14 +59,13 @@
           </div>
         </div>
         <hr />
-        
+
         <div v-for="skill in skills" :key="skill">
           <ListsSkillsList :skills="skill" />
         </div>
         <div class="w-auto" v-if="!skills || loader">
           <VueSkeleton />
         </div>
-
       </div>
       <div class="flex-wrap w-full md:w-[50%] lg:w-[60%]">
         <div class="w-full">
@@ -91,7 +103,7 @@
     </div>
 
     {{ test }}
-    <div v-if="searchValue">
+    <div>
       {{ searchSkill }}
     </div>
   </div>
@@ -132,7 +144,7 @@ watchEffect(() => {
 });
 
 const searchSkill = computed(() => {
-    loader.value = true;
+  loader.value = true;
   const { loading, result, error } = useQuery(SEARCH_SKILLS, {
     search: "%" + searchValue.value + "%",
   });
@@ -140,12 +152,12 @@ const searchSkill = computed(() => {
   watchEffect(() => {
     if (result.value) {
       console.log("result.value", result.value);
-        
+
       skills.value = result.value.skills;
-       loader.value = false;
+      loader.value = false;
     } else if (error.value) {
       console.log("error.value", error.value);
-       loader.value = false;
+      loader.value = false;
     }
   });
 });
@@ -160,13 +172,13 @@ const {
   },
 });
 const sortSkillsAsc = (type) => {
-        loader.value = true;
+  loader.value = true;
   watchEffect(() => {
     if (Tasc_r.value) {
       skills.value = Tasc_r.value.skills;
-       loader.value = false;
+      loader.value = false;
     } else if (Tasc_e.value) {
-         loader.value = false;
+      loader.value = false;
       console.log("error.value", Tasc_e.value);
     }
   });
@@ -181,13 +193,13 @@ const {
   },
 });
 const sortSkillsDesc = (type) => {
-     loader.value = true;
+  loader.value = true;
   watchEffect(() => {
     if (Tdesc_r.value) {
       skills.value = Tdesc_r.value.skills;
-       loader.value = false;
+      loader.value = false;
     } else if (Tdesc_e.value) {
-         loader.value = false;
+      loader.value = false;
       console.log("error.value", Tdesc_e.value);
     }
   });
@@ -203,14 +215,14 @@ const {
   },
 });
 const sortSkillsLAsc = () => {
-     loader.value = true;
+  loader.value = true;
   watchEffect(() => {
     if (Dasc_r.value) {
       skills.value = Dasc_r.value.skills;
-       loader.value = false;
+      loader.value = false;
     } else if (Dasc_e.value) {
       console.log("error.value", Dasc_e.value);
-       loader.value = false;
+      loader.value = false;
     }
   });
 };
@@ -224,14 +236,14 @@ const {
   },
 });
 const sortSkillsLDesc = () => {
-     loader.value = true;
+  loader.value = true;
   watchEffect(() => {
     if (Ddesc_r.value) {
       skills.value = Ddesc_r.value.skills;
-       loader.value = false;
+      loader.value = false;
     } else if (Ddesc_e.value) {
       console.log("error.value", Ddesc_e.value);
-       loader.value = false;
+      loader.value = false;
     }
   });
 };

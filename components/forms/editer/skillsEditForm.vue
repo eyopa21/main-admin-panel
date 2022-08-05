@@ -9,7 +9,7 @@
         w-full
         md:mb-6
         shadow-lg
-        md:rounded-2xl
+         md:rounded-lg
         p-2
         md:p-8
         pt-4
@@ -62,12 +62,14 @@
           </div>
         </div>
       </div>
-      <div class="flex flex-row justify-end text-xs pt-8">
-        <div class="mr-2">
+      <div class="flex flex-row  justify-end md:ml-32 text-xs pt-8 md:-mr-4">
+        <div class="mr-1 font-light">
           created at: {{ editData.editSkill.created_at.split("T", 1)[0] }}
         </div>
+        <div class="font-bold">
         |
-        <div class="ml-2">
+        </div>
+        <div class="ml-1 font-light">
           last Update on: {{ editData.editSkill.updated_at.split("T", 1)[0] }}
         </div>
       </div>

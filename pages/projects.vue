@@ -29,7 +29,7 @@
             @emit-input="(n) => (searchValue = n)"
           />
         </div>
-        <div class="flex flex-row justify-around -ml-16 -pl-32 w-full   font-bold">
+        <div class="flex flex-row justify-around -ml-12  w-full   font-bold">
           <div class="flex flex-wrap ">
             <div>Name</div>
             <div>
@@ -88,7 +88,7 @@
     </div>
 
     {{ test }}
-    <div v-if="searchValue">
+    <div>
       {{ searchProjects }}
     </div>
   </div>

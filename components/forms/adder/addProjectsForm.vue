@@ -10,16 +10,16 @@
           w-full
           md:mb-6
           shadow-lg
-          md:rounded-2xl
+           md:rounded-lg
           p-8
           min-h-screen
           md:h-full
         "
       >
-        <div class="flex flex-row">
+        <div class="flex flex-row md:flex-col lg:flex-row">
           <div
             :class="url ? 'bg-transparent' : 'bg-red-300'"
-            class="bg-red-300 w-[60%]"
+            class="bg-red-300 w-[70%] md:w-full lg-w-[70%]"
           >
             <div
               :class="url ? 'hidden' : 'block'"
@@ -48,15 +48,15 @@
             </div>
             <img
               :class="url ? 'block' : 'hidden'"
-              class="h-48 object-fill w-full"
+              class="h-48 object-cover w-full"
               :src="url"
               alt=""
             />
           </div>
-          <div class="m-4">
+          <div class="m-4 md:ml-0 lg:ml-4 ml-8">
             <VueBtn
               @click="selectImage()"
-              :name="url ? 'Change Image' : 'Select Image'"
+              :name="url ? 'Change' : 'Select'"
               type="button"
             />
           </div>
