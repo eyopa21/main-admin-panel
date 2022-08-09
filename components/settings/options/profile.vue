@@ -5,13 +5,16 @@
         flex flex-col
         min-w-0
         break-words
+        sm:p-8
+        md:p-0
+        lg:p-8
         bg-white
         w-full
+        rounded-xl
         mb-6
         shadow-lg
         min-h-screen
         md:min-h-full
-        rounded
       "
     >
       <form @submit.prevent="update()">
@@ -22,7 +25,15 @@
                 <div @click="selectImage()" class="relative z-0">
                   <img
                     v-if="data.picture && !url"
-                    class="w-20 h-20 md:w-36 md:h-36 rounded-full object-fit"
+                    class="
+                      w-20
+                      h-20
+                      md:w-36
+                      bg-slate-700
+                      md:h-36
+                      rounded-full
+                      object-fit
+                    "
                     :src="data.picture"
                     alt="profile pic"
                   />
@@ -47,7 +58,17 @@
                   /></span>
                 </div>
               </div>
-              <div class="md:m-auto text-xl md:text-2xl font-bold">
+              <div
+                class="
+                  md:m-auto
+                  pl-2
+                  text-xl
+                  md:text-2xl
+                  text-emerald-500
+                  font-bold
+                  uppercase
+                "
+              >
                 Edit your personal information here
               </div>
             </div>
@@ -169,8 +190,6 @@ const update = handleSubmit((formValues) => {
       });
   }
 });
-
-
 
 const selectImage = () => {
   var input = document.createElement("input");

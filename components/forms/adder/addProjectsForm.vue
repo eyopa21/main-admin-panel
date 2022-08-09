@@ -11,7 +11,10 @@
           md:mb-6
           shadow-lg
            md:rounded-lg
-          p-8
+          p-4
+          sm:p-8
+          md:p-4
+          lg:p-8
           min-h-screen
           md:h-full
         "
@@ -19,7 +22,7 @@
         <div class="flex flex-row md:flex-col lg:flex-row">
           <div
             :class="url ? 'bg-transparent' : 'bg-red-300'"
-            class="bg-red-300 w-[70%] md:w-full lg-w-[70%]"
+            class="bg-red-300 -ml-3 sm:-ml-0 -mr-6 sm:-mr-0 w-[70%] md:w-full lg-w-[70%]"
           >
             <div
               :class="url ? 'hidden' : 'block'"
@@ -53,7 +56,7 @@
               alt=""
             />
           </div>
-          <div class="m-4 md:ml-0 lg:ml-4 ml-8">
+          <div class="m-2 md:ml-0 lg:ml-4 ml-8 -mr-4 sm:-mr-2">
             <VueBtn
               @click="selectImage()"
               :name="url ? 'Change' : 'Select'"

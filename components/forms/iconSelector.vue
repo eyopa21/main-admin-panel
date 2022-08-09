@@ -24,11 +24,13 @@
     <ul
       class="
         px-4
-        md:px-16
+        sm:px-12
+        md:px-4
         dark:border-gray-700
         w-full
         grid grid-cols-3
-        md:grid-cols-6
+        md:grid-cols-4
+        lg:grid-cols-6
         gap-0
       "
     >

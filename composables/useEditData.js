@@ -4,7 +4,8 @@ export default function() {
             editSkill: '',
             editProject: '',
             editTimeline: '',
-            editLinks: ''
+            editLinks: '',
+            check: ''
         }
     })
 }

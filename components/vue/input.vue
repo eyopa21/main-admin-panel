@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col justify-start mt-2 z-0">
-    <div class="mb-2 flex flex-row font-semibold">
+    <div class="mb-2 flex flex-row ">
       {{ props.label }}<span v-if="props.astrix">*</span>
     </div>
 

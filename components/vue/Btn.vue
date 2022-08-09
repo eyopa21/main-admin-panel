@@ -2,7 +2,13 @@
   <div>
     <button
       :type="props.type"
-      :class="props.classs"
+      :class="[
+        props.classs,
+        props.disable
+          ? 'inline-block bg-emeraled-600 text-white font-medium  rounded shadow-md focus:outline-none focus:ring-0 transition duration-150 ease-in-out pointer-events-none opacity-60'
+          : '',
+      ]"
+      :disabled="props.disable"
       class="
         bg-emerald-500
         flex flex-row
@@ -58,7 +64,11 @@ const props = defineProps({
   },
   loader: {
     type: Boolean,
-    required: false
-  }
+    required: false,
+  },
+  disable: {
+    type: Boolean,
+    required: false,
+  },
 });
 </script>

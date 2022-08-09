@@ -35,7 +35,7 @@
             :data="data.description"
             @emit-input="(n) => (data.description = n)"
           />
-          <VueBtn name="Update" type="submit" class="pt-8" :loader="load" />
+          <VueBtn name="Update" type="submit" class="pt-8" :loader="load" :disable="getDisable"/>
         </div>
       </form>
 
@@ -114,6 +114,20 @@ watchEffect(() => {
     console.log("error.value", error.value);
     layoutState.value.alert.message = "Connection error please try again";
     layoutState.value.alert.success = false;
+  }
+});
+const getDisable = computed(() => {
+  if (result.value) {
+    if (
+      result.value.contactPage[0].header == data.value.header &&
+      result.value.contactPage[0].description == data.value.description
+    ) {
+      console.log("change something");
+      return true;
+    } else {
+      console.log("good");
+      return false;
+    }
   }
 });
 </script>

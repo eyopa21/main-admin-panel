@@ -9,9 +9,11 @@
         w-full
         md:mb-6
         shadow-lg
-         md:rounded-lg
+        md:rounded-lg
         p-2
-        md:p-8
+        sm:p-8
+        md:p-2
+        lg:p-8
         pt-4
         md:pt-4
         h-screen
@@ -62,13 +64,22 @@
           </div>
         </div>
       </div>
-      <div class="flex flex-row  justify-end md:ml-32 text-xs pt-8 md:-mr-4">
+      <div
+        class="
+          flex flex-row
+          justify-end
+          md:ml-32
+          text-xs
+          pt-8
+          sm:-mr-4
+          md:-mr-0
+          lg:-mr-4
+        "
+      >
         <div class="mr-1 font-light">
           created at: {{ editData.editSkill.created_at.split("T", 1)[0] }}
         </div>
-        <div class="font-bold">
-        |
-        </div>
+        <div class="font-bold">|</div>
         <div class="ml-1 font-light">
           last Update on: {{ editData.editSkill.updated_at.split("T", 1)[0] }}
         </div>
@@ -82,7 +93,7 @@
             name="Skill_Name"
             rule="required"
             :data="editData.editSkill.skill_name"
-            @emit-input="(n) => n"
+            @emit-input="(n) => (data.skill_name = n)"
           />
           <VueInput
             type="number"
@@ -90,11 +101,16 @@
             name="level"
             rule="number:10,100"
             :data="editData.editSkill.level"
-            @emit-input="(n) => n"
+            @emit-input="(n) => (data.level = n)"
           />
 
           <div class="mt-6 flex flex-row space-x-2">
-            <VueBtn name="Update" type="submit" :loader="load"/>
+            <VueBtn
+              name="Update"
+              type="submit"
+              :loader="load"
+              :disable="getDisable"
+            />
           </div>
         </form>
       </div>
@@ -109,12 +125,18 @@ import { UPDATE_SKILLS } from "~~/gql/skills/updateSkills";
 import { useQuery, useMutation } from "@vue/apollo-composable";
 import { DELETE_SKILLS } from "~~/gql/skills/deleteSkills";
 import { DELETE_SKILL_PROJECT } from "~~/gql/skills/deleteProjectSkill";
+import { GET_SKILL } from "~~/gql/skills/oneSkill";
+const disable = ref(true);
 
 const { handleSubmit } = useForm();
 const router = useRouter();
 const editData = useEditData();
 const showForm = ref(false);
 const load = ref(false);
+const data = ref({
+  skill_name: "",
+  level: "",
+});
 
 const { mutate: update_skills } = useMutation(UPDATE_SKILLS);
 const update = handleSubmit((formValues) => {
@@ -173,4 +195,22 @@ const deleteSkill = (id) => {
       });
   }
 };
+
+const test = () => {
+  disable.value = false;
+  console.log("test");
+};
+
+const getDisable = computed(() => {
+  if (
+    data.value.skill_name == editData.value.editSkill.skill_name &&
+    data.value.level == editData.value.editSkill.level
+  ) {
+    console.log("change nedd");
+    return true;
+  } else {
+    return false;
+    console.log("good");
+  }
+});
 </script>

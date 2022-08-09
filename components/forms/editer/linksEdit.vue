@@ -67,7 +67,7 @@
             name="Link_Name"
             rule="required"
             :data="editData.editLinks.name"
-            @emit-input="(n) => n"
+            @emit-input="(n) => data.name = n"
           />
           <VueInput
             type="text"
@@ -75,11 +75,11 @@
             name="Value"
             rule="required"
             :data="editData.editLinks.value"
-            @emit-input="(n) => n"
+            @emit-input="(n) => data.value = n"
           />
 
           <div class="mt-6 flex flex-row space-x-2">
-            <VueBtn name="Update" type="submit" :loader="load"/>
+            <VueBtn name="Update" type="submit" :loader="load" :disable="getDisable"/>
           </div>
         </form>
       </div>
@@ -99,7 +99,10 @@ const router = useRouter();
 const editData = useEditData();
 const showForm = ref(false);
 const load = ref(false)
-
+const data = ref({
+  name: "",
+  value: ""
+});
 const { mutate: update_links } = useMutation(UPDATE_LINKS);
 const update = handleSubmit((formValues) => {
   load.value = true;
@@ -153,4 +156,17 @@ const deleteLinks = (links) => {
       });
   }
 };
+
+const getDisable = computed(() => {
+  if (
+    data.value.name == editData.value.editLinks.name &&
+    data.value.value == editData.value.editLinks.value
+  ) {
+    console.log("change nedd");
+    return true;
+  } else {
+    return false;
+    console.log("good");
+  }
+});
 </script>

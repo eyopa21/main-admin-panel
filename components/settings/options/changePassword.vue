@@ -16,10 +16,10 @@
     "
   >
     <div class="mb-8">
-      <div class="text-3xl md:text-5xl text white font-bold">
+      <div class="text-3xl md:text-5xl font-serif font-bold">
         Change your password here
       </div>
-      <div class="p-4">
+      <div class="p-4  font-serif text-red-500 ">
         Your new password must be different from your previous one
       </div>
     </div>

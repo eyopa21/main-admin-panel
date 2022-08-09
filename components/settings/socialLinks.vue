@@ -16,7 +16,7 @@
         <div class="w-full">
           <div
             v-if="!showAddForm && !editData.editLinks"
-            class="m-24 block md:hidden"
+            class="mt-24 flex justify-center md:hidden"
           >
             <VueBtn
               @click="showAddForm = true"
@@ -26,7 +26,7 @@
           </div>
           <div
             v-if="!showAddForm && !editData.editLinks"
-            class="m-32 hidden md:block"
+            class="mt-32 hidden md:flex justify-center"
           >
             <VueBtn
               @click="showAddForm = true"

@@ -29,7 +29,7 @@
             @emit-input="(n) => (searchValue = n)"
           />
         </div>
-        <div class="flex flex-row justify-around -ml-12  w-full   font-bold">
+        <div class="flex flex-row justify-around -ml-6 sm:-ml-12  w-full   font-bold">
           <div class="flex flex-wrap ">
             <div>Name</div>
             <div>
@@ -57,7 +57,7 @@
         <div class="w-full">
           <div
             v-if="!showAddForm && !editData.editProject"
-            class="m-24 block md:hidden"
+            class="mt-24 flex justify-center md:hidden"
           >
             <VueBtn
               @click="showAddForm = true"
@@ -67,7 +67,7 @@
           </div>
           <div
             v-if="!showAddForm && !editData.editProject"
-            class="my-64 mx-12 lg:m-48 hidden md:block"
+            class="mt-48 hidden md:flex justify-center"
           >
             <VueBtn
               @click="showAddForm = true"

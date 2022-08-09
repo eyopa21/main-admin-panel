@@ -54,7 +54,19 @@
             </div>
           </div>
 
-          <div class="w-[40%] md:mt-4 lg:mt-0 h-8 pt-20 grid gap-2 grid-cols-2 ml-2">
+          <div
+            class="
+              w-[40%]
+              md:mt-4
+              lg:mt-0
+              h-8
+              pt-20
+              grid
+              gap-2
+              grid-cols-2
+              ml-2
+            "
+          >
             <div
               v-for="skill in editData.editProject.project_skills"
               :key="skill"
@@ -74,16 +86,14 @@
           <div class="mr-2">
             created at: {{ editData.editProject.created_at.split("T", 1)[0] }}
           </div>
-          <div class="font-bold">
-          |
-          </div>
+          <div class="font-bold">|</div>
           <div class="ml-2">
             Last update on:
             {{ editData.editProject.updated_at.split("T", 1)[0] }}
           </div>
         </div>
       </div>
-      <form class="pr-2" v-if="showForm" @submit.prevent="add()">
+      <form class="pr-2" v-if="showForm" @submit.prevent="update()">
         <div class="flex flex-row">
           <div :class="url ? '' : 'bg-red-300'" class="w-[60%]">
             <img
@@ -99,10 +109,10 @@
               alt=""
             />
           </div>
-          <div class="m-4">
+          <div class="m-4 -mr-4">
             <VueBtn
               @click="selectImage()"
-              :name="url ? 'Change Image' : 'Select Image'"
+              :name="url ? 'Change' : 'Select'"
               type="button"
             />
           </div>
@@ -157,7 +167,12 @@
         </div>
 
         <div class="mt-6 flex flex-row space-x-2">
-          <VueBtn name="Update" type="submit" :loader="load" />
+          <VueBtn
+            name="Update"
+            type="submit"
+            :loader="load"
+            :disable="getDisable"
+          />
           <VueBtn @click="preview()" name="Preview" type="button" />
         </div>
       </form>
@@ -198,7 +213,7 @@ const { mutate: update_projects } = useMutation(UPDATE_PROJECTS);
 const { mutate: store_image } = useMutation(STORE_IMAGE);
 const { mutate: add_project_skill } = useMutation(ADD_SKILL_PROJECT);
 
-const add = handleSubmit((formValues) => {
+const update = handleSubmit((formValues) => {
   load.value = true;
   console.log(formValues);
   console.log("skills", editForm.value.skills);
@@ -365,4 +380,37 @@ const deleteProject = () => {
       });
   }
 };
+
+const getDisable = computed(() => {
+  const temp = ref([]);
+  for (let i in editData.value.editProject.project_skills) {
+    temp.value.push(editData.value.editProject.project_skills[i].skill)
+   // console.log("skk", editData.value.editProject.project_skills[i].skill);
+  }
+
+  console.log("sk", editForm.value.skills);
+   console.log("temp", temp.value);
+
+  if (
+    editForm.value.title == editData.value.editProject.title &&
+    editForm.value.subtitle == editData.value.editProject.subtitle &&
+    editForm.value.description == editData.value.editProject.description &&
+    editForm.value.link == editData.value.editProject.link &&
+    editForm.value.image == "" && arrayEquals(temp.value, editForm.value.skills)
+  ) {
+    console.log("change nedd");
+    return true;
+  } else {
+    return false;
+    console.log("good");
+  }
+});
+function arrayEquals(a, b) {
+  return (
+    Array.isArray(a) &&
+    Array.isArray(b) &&
+    a.length === b.length &&
+    a.every((val, index) => val === b[index])
+  );
+}
 </script>

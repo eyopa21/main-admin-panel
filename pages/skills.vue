@@ -35,6 +35,7 @@
           v-if="skills"
           class="
             flex flex-row
+            justify-start
             space-x-32
             sm:space-x-48
             md:space-x-32
@@ -50,7 +51,7 @@
               <ChevronDownIcon @click="sortSkillsDesc()" class="w-4 h-4" />
             </div>
           </div>
-          <div class="flex flex-wrap">
+          <div class="flex flex-wrap sm:pl-16 ">
             <div>Level</div>
             <div>
               <ChevronUpIcon @click="sortSkillsLAsc()" class="w-4 h-4" />
@@ -71,7 +72,7 @@
         <div class="w-full">
           <div
             v-if="!showAddForm && !editData.editSkill"
-            class="m-24 block md:hidden"
+            class="flex justify-center mt-16 md:hidden"
           >
             <VueBtn
               @click="showAddForm = true"
@@ -81,7 +82,7 @@
           </div>
           <div
             v-if="!showAddForm && !editData.editSkill"
-            class="my-64 mx-12 lg:m-48 hidden md:block"
+            class="mt-48 hidden md:flex justify-center"
           >
             <VueBtn
               @click="showAddForm = true"
@@ -136,7 +137,7 @@ const skills = ref("");
 const { loading, result, error } = useQuery(GET_SKILLS);
 watchEffect(() => {
   if (result.value) {
-    console.log("result.value", result.value);
+    //console.log("result.value", result.value);
     skills.value = result.value.skills;
   } else if (error.value) {
     console.log("error.value", error.value);
@@ -148,10 +149,10 @@ const searchSkill = computed(() => {
   const { loading, result, error } = useQuery(SEARCH_SKILLS, {
     search: "%" + searchValue.value + "%",
   });
-  console.log("search", searchValue.value);
+  //console.log("search", searchValue.value);
   watchEffect(() => {
     if (result.value) {
-      console.log("result.value", result.value);
+      //console.log("result.value", result.value);
 
       skills.value = result.value.skills;
       loader.value = false;

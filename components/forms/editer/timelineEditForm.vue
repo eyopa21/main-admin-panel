@@ -11,7 +11,10 @@
         shadow-lg
          md:rounded-lg
         p-2
-        md:p-8
+        sm:p-8
+       
+        md:p-2
+        lg:p-8
         pt-4
         md:pt-4
         h-screen
@@ -72,7 +75,7 @@
             name="Incident"
             rule="required"
             :data="editData.editTimeline.title"
-            @emit-input="(n) => n"
+            @emit-input="(n) => data.title = n"
           />
           <VueInput
             type="text"
@@ -80,7 +83,7 @@
             name="Place"
             rule="required"
             :data="editData.editTimeline.subtitle"
-            @emit-input="(n) => n"
+            @emit-input="(n) => data.subtitle = n"
           />
           <VueInput
             type="text"
@@ -88,11 +91,11 @@
             name="Year"
             rule="required"
             :data="editData.editTimeline.description"
-            @emit-input="(n) => n"
+            @emit-input="(n) => data.description = n"
           />
 
           <div class="mt-6 flex flex-row space-x-2">
-            <VueBtn name="Update" type="submit" :loader="load" />
+            <VueBtn name="Update" type="submit" :loader="load" :disable="getDisable"/>
             <!--VueBtn
               @click="discard()"
               name="Discard"
@@ -118,7 +121,11 @@ const editData = useEditData();
 const showForm = ref(false);
 const layoutState = useLayout();
 const load = ref(false);
-
+const data = ref({
+  title: "",
+  subtitle: "",
+  description: ''
+});
 const { mutate: update_timeline } = useMutation(UPDATE_TIMELINE);
 const update = handleSubmit((formValues) => {
   load.value = true;
@@ -179,4 +186,20 @@ const deleteTimeline = (timeline) => {
       });
   }
 };
+
+
+const getDisable = computed(() => {
+  if (
+    data.value.title == editData.value.editTimeline.title &&
+    data.value.subtitle == editData.value.editTimeline.subtitle &&
+    data.value.description == editData.value.editTimeline.description
+    
+  ) {
+    console.log("change nedd");
+    return true;
+  } else {
+    return false;
+    console.log("good");
+  }
+});
 </script>

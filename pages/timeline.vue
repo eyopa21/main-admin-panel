@@ -29,15 +29,15 @@
             @emit-input="(n) => (searchValue = n)"
           />
         </div>
-        <div class="flex flex-row justify-start w-full ml-4 font-bold">
-          <div class="flex flex-wrap">
+        <div class="flex flex-row justify-around -ml-8 sm:-ml-24 md:-ml-8  lg:-ml-12 w-full  font-bold">
+          <div class="flex flex-wrap"> 
             <div>Incident</div>
             <div>
               <ChevronUpIcon @click="sortTimelinesAsc()" class="w-4 h-4" />
               <ChevronDownIcon @click="sortTimelinesDesc()" class="w-4 h-4" />
             </div>
           </div>
-          <div class="flex flex-wrap pl-32 md:pl-32">
+          <div class="flex flex-wrap ">
             <div>Year</div>
             <div>
               <ChevronUpIcon @click="sortTimelinesSAsc()" class="w-4 h-4" />
@@ -57,7 +57,7 @@
         <div class="w-full">
           <div
             v-if="!showAddForm && !editData.editTimeline"
-            class="m-24 block md:hidden"
+            class="mt-24 flex justify-center md:hidden"
           >
             <VueBtn
               @click="showAddForm = true"
@@ -67,7 +67,7 @@
           </div>
           <div
             v-if="!showAddForm && !editData.editTimeline"
-            class="m-48 hidden md:block"
+            class="mt-48 hidden md:flex justify-center"
           >
             <VueBtn
               @click="showAddForm = true"

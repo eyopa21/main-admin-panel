@@ -38,7 +38,13 @@
             :data="data.description"
             @emit-input="(n) => (data.description = n)"
           />
-          <VueBtn name="Update" type="submit" class="pt-8" :loader="load"/>
+          <VueBtn
+            name="Update"
+            type="submit"
+            class="pt-8"
+            :loader="load"
+            :disable="getDisable"
+          />
         </div>
       </form>
 
@@ -69,6 +75,7 @@
 
       <!--VueBtn name="homepage" type="button" icon="test" classs="py-6 rounded-2xl "/-->
     </div>
+   
   </div>
 </template>
 <script setup>
@@ -79,14 +86,29 @@ import { useQuery, useMutation } from "@vue/apollo-composable";
 const { handleSubmit } = useForm();
 const layoutState = useLayout();
 const load = ref(false);
+const disable = ref(false);
 const data = ref({
   header: "",
   description: "",
 });
+const getDisable = computed(() => {
+  if (
+    result.value.homePage[0].header == data.value.header &&
+    result.value.homePage[0].description == data.value.description
+  ) {
+    console.log("change something");
+    return true;
+  } else {
+    console.log("good");
+    return false;
+  }
+});
+
 const { mutate: update_homePage } = useMutation(UPDATE_HOMEPAGE);
 const updateContent = handleSubmit((formValues) => {
   load.value = true;
   console.log(formValues);
+
   update_homePage({
     header: formValues.Header,
     description: formValues.Description,

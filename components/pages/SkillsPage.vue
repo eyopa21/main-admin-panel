@@ -35,7 +35,7 @@
             :data="data.description"
             @emit-input="(n) => (data.description = n)"
           />
-          <VueBtn name="Update" type="submit" class="pt-8" :loader="load" />
+          <VueBtn name="Update" type="submit" class="pt-8" :loader="load" :disable="getDisable"/>
         </div>
       </form>
 
@@ -66,6 +66,7 @@
 
       <!--VueBtn name="homepage" type="button" icon="test" classs="py-6 rounded-2xl "/-->
     </div>
+   
   </div>
 </template>
 <script setup>
@@ -82,6 +83,7 @@ const data = ref({
   header: "",
   description: "",
 });
+
 const { mutate: update_skillspage } = useMutation(UPDATE_SKILLSPAGE);
 const updateContent = handleSubmit((formValues) => {
   load.value = true;
@@ -115,6 +117,20 @@ watchEffect(() => {
     console.log("error.value", error.value);
     layoutState.value.alert.message = "Connection error please try again";
     layoutState.value.alert.success = false;
+  }
+});
+const getDisable = computed(() => {
+  if (result.value) {
+    if (
+      result.value.skillsPage[0].header == data.value.header &&
+      result.value.skillsPage[0].description == data.value.description
+    ) {
+      console.log("change something");
+      return true;
+    } else {
+      console.log("good");
+      return false;
+    }
   }
 });
 </script>

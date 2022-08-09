@@ -37,5 +37,6 @@ const props = defineProps({
 function preview() {
   console.log("test");
   editData.value.editSkill = props.skills;
+  editData.value.check = props.skills;
 }
 </script>
