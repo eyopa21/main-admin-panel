@@ -53,10 +53,10 @@
           <VueSkeleton />
         </div>
       </div>
-      <div class="flex-wrap w-full md:w-[60%]">
+      <div  class="flex-wrap w-full md:w-[60%]">
         <div class="w-full">
           <div
-            v-if="!showAddForm && !editData.editTimeline"
+            v-if="!showAddForm && !editData.editTimeline && $route.fullPath == '/timeline'"
             class="mt-24 flex justify-center md:hidden"
           >
             <VueBtn
@@ -66,7 +66,7 @@
             />
           </div>
           <div
-            v-if="!showAddForm && !editData.editTimeline"
+            v-if="!showAddForm && !editData.editTimeline && $route.fullPath == '/timeline'"
             class="mt-48 hidden md:flex justify-center"
           >
             <VueBtn
@@ -80,7 +80,7 @@
               v-if="showAddForm && !editData.editTimeline"
               @closeAddForm="showAddForm = false"
             />
-            <NuxtPage v-if="editData.editTimeline" />
+            <NuxtPage  />
             <!--FormsEditerTimelineEditForm v-if="editData.editTimeline" /-->
           </div>
         </div>
@@ -94,7 +94,7 @@
   </div>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, onUpdated } from "vue";
 import { ChevronUpIcon } from "@heroicons/vue/outline";
 import { ChevronDownIcon } from "@heroicons/vue/outline";
 import { GET_TIMELINE } from "~~/gql/timeline/getTimeline";
@@ -104,14 +104,19 @@ import { SORT_TIMELINE } from "~~/gql/timeline/sortTimeline";
 const showAddForm = ref(false);
 const editData = useEditData();
 const loader = ref(false);
+const timelines = ref("");
 
 const test = computed(() => {
   if (editData.value.editTimeline && showAddForm.value) {
     showAddForm.value = false;
   }
 });
+onUpdated(() => {
+ if (process.client) {
+    window.scrollTo(0, 0);
+  }
+})
 
-const timelines = ref("");
 
 const { loading, result, error } = useQuery(GET_TIMELINE);
 watchEffect(() => {

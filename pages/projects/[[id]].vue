@@ -1,7 +1,7 @@
 <template>
   <div>
     <FormsEditerProjectsEditForm v-if="editData.editProject" />
-   
+    <VueDotLoader class="mt-0 md:mt-48" v-else-if="!editData.editProject && $route.fullPath !== '/projects'"/>
     <!--p>{{ $route.params.id }}</p-->
   </div>
 </template>
@@ -14,26 +14,24 @@ const editData = useEditData();
 
 const projects = ref("");
 
-  if (route.params.id) {
-    //console.log("route", route.params.id);
+if (route.params.id) {
+ 
 
-    const { loading, result, error } = useQuery(GET_PROJECT, {
-      id: route.params.id,
-    });
-    watchEffect(() => {
-      if (result.value) {
-        console.log("one project", result.value);
-        projects.value = result.value.projects_by_pk;
-        editData.value.editProject = projects.value;
-        //console.log("one project val", projects.value);
-        //console.log("one project vall", editData.value.editProject);
-      } else if (error.value) {
-        console.log("error.value", error.value);
-      }
-    });
-  }
-  else{
-editData.value.editProject = '';
-  }
-
+  const { loading, result, error } = useQuery(GET_PROJECT, {
+    id: route.params.id,
+  });
+  watchEffect(() => {
+    if (result.value) {
+     
+      projects.value = result.value.projects_by_pk;
+      editData.value.editProject = projects.value;
+      //console.log("one project val", projects.value);
+      //console.log("one project vall", editData.value.editProject);
+    } else if (error.value) {
+      console.log("error.value", error.value);
+    }
+  });
+} else {
+  editData.value.editProject = "";
+}
 </script>

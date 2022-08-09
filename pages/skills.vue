@@ -71,7 +71,7 @@
       <div class="flex-wrap w-full md:w-[50%] lg:w-[60%]">
         <div class="w-full">
           <div
-            v-if="!showAddForm && !editData.editSkill"
+            v-if="!showAddForm && !editData.editSkill && $route.fullPath == '/skills'"
             class="flex justify-center mt-16 md:hidden"
           >
             <VueBtn
@@ -81,7 +81,7 @@
             />
           </div>
           <div
-            v-if="!showAddForm && !editData.editSkill"
+            v-if="!showAddForm && !editData.editSkill && $route.fullPath == '/skills'"
             class="mt-48 hidden md:flex justify-center"
           >
             <VueBtn
@@ -96,7 +96,7 @@
               v-if="showAddForm && !editData.editSkill"
               @closeAddForm="showAddForm = false"
             />
-            <NuxtPage v-if="editData.editSkill" />
+            <NuxtPage  />
             <!--FormsEditerSkillsEditForm v-if="editData.editSkill" /-->
           </div>
         </div>
@@ -110,7 +110,7 @@
   </div>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, onUpdated } from "vue";
 import { useRouter } from "vue-router";
 import { onMounted, onUnmounted } from "@vue/composition-api";
 import { ChevronUpIcon } from "@heroicons/vue/outline";
@@ -125,6 +125,7 @@ const editData = useEditData();
 
 const searchValue = ref("");
 const loader = ref(false);
+const skills = ref("");
 
 const test = computed(() => {
   if (editData.value.editSkill && showAddForm.value) {
@@ -132,7 +133,12 @@ const test = computed(() => {
   }
 });
 
-const skills = ref("");
+onUpdated(() => {
+ if (process.client) {
+    window.scrollTo(0, 0);
+  }
+})
+ 
 
 const { loading, result, error } = useQuery(GET_SKILLS);
 watchEffect(() => {

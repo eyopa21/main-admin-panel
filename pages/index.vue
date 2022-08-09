@@ -1,9 +1,11 @@
 <template>
-  <div class="flex flex-col  pb-32 bg-emerald-400 h-96 md:h-80">
+  <div v-if="views!==''" class="flex flex-col  pb-32 bg-emerald-400 h-96 md:h-80">
     <div
+      
       class="flex md:p-24 ml-2  pb-12 pt-24 md:pb-8 w-2/3 md:w-[40%] flex-col md:flex-row md:space-x-4"
     >
       <div
+    
         class="
           min-w-0
           flex flex-col
@@ -17,7 +19,7 @@
           rounded-xl
         "
       >
-        <div class="flex flex-row justify-between">
+        <div  class="flex flex-row justify-between">
           <div>
             <div class="font-semibold font-xl uppercase">total views</div>
             <div class="text-xl font-extrabold pl-1">
@@ -113,6 +115,7 @@
       </div>
     </div>
   </div>
+  <div v-else  class="flex justify-center bg-white mt-64 "><VueDotLoader/></div>
 </template>
 
 <script setup>

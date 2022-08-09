@@ -16,7 +16,9 @@
         class="
           flex flex-col
           w-full
-          md:w-[50%] lg:w-[40%] md:border-r-[1px] md:pr-2 md:border-gray-200
+          md:w-[50%]
+          lg:w-[40%]
+          md:border-r-[1px] md:pr-2 md:border-gray-200
         "
       >
         <div class="ml-2 my-4 mr-4 mb-8">
@@ -29,15 +31,17 @@
             @emit-input="(n) => (searchValue = n)"
           />
         </div>
-        <div class="flex flex-row justify-around -ml-6 sm:-ml-12  w-full   font-bold">
-          <div class="flex flex-wrap ">
+        <div
+          class="flex flex-row justify-around -ml-6 sm:-ml-12 w-full font-bold"
+        >
+          <div class="flex flex-wrap">
             <div>Name</div>
             <div>
               <ChevronUpIcon @click="sortProjectAsc()" class="w-4 h-4" />
               <ChevronDownIcon @click="sortProjectDesc()" class="w-4 h-4" />
             </div>
           </div>
-          <div class="flex flex-wrap ">
+          <div class="flex flex-wrap">
             <div>Description</div>
             <div>
               <ChevronUpIcon @click="sortProjectDAsc()" class="w-4 h-4" />
@@ -56,7 +60,11 @@
       <div class="flex-wrap w-full md:w-[50%] lg:w-[60%]">
         <div class="w-full">
           <div
-            v-if="!showAddForm && !editData.editProject"
+            v-if="
+              !showAddForm &&
+              !editData.editProject &&
+              $route.fullPath == '/projects'
+            "
             class="mt-24 flex justify-center md:hidden"
           >
             <VueBtn
@@ -65,8 +73,13 @@
               type="button"
             />
           </div>
+          
           <div
-            v-if="!showAddForm && !editData.editProject"
+            v-if="
+              !showAddForm &&
+              !editData.editProject &&
+              $route.fullPath == '/projects'
+            "
             class="mt-48 hidden md:flex justify-center"
           >
             <VueBtn
@@ -74,13 +87,16 @@
               name="Click here to add new "
               type="button"
             />
+           
+        
           </div>
+          
           <div class="md:m-8">
             <FormsAdderAddProjectsForm
               v-if="showAddForm && !editData.editProject"
               @closeAddForm="showAddForm = false"
             />
-            <NuxtPage  />
+            <NuxtPage />
             <!--FormsEditerProjectsEditForm v-if="editData.editProject" /-->
           </div>
         </div>
@@ -94,7 +110,7 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onUpdated } from "vue";
 import { ChevronUpIcon } from "@heroicons/vue/outline";
 import { ChevronDownIcon } from "@heroicons/vue/outline";
 import { GET_PROJECTS } from "~~/gql/projects/getProjects";
@@ -104,18 +120,19 @@ import { SORT_PROJECTS_ASC } from "~~/gql/projects/sortProjectsAsc";
 const showAddForm = ref(false);
 const editData = useEditData();
 const loader = ref(false);
-onMounted(() => {
-  console.log("mount")
-})
-
+  const projects = ref("");
 
 const test = computed(() => {
   if (editData.value.editProject && showAddForm.value) {
     showAddForm.value = false;
   }
 });
+onUpdated(() => {
+ if (process.client) {
+    window.scrollTo(0, 0);
+  }
+})
 
-const projects = ref("");
 
 const { loading, result, error } = useQuery(GET_PROJECTS);
 watchEffect(() => {

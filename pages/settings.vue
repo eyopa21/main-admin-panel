@@ -112,7 +112,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onUpdated } from "vue";
 import { HomeIcon } from "@heroicons/vue/outline";
 import { CogIcon } from "@heroicons/vue/outline";
 
@@ -130,6 +130,11 @@ const toggleTabs = (number) => {
 
 
 
+onUpdated(() => {
+ if (process.client) {
+    window.scrollTo(0, 0);
+  }
+})
 
 
 

@@ -26,7 +26,9 @@
 </template>
 
 <script setup>
+    import { useRouter } from "vue-router";
 const editData = useEditData();
+const router = useRouter();
 const props = defineProps({
   skills: {
     type: Object,
@@ -38,5 +40,6 @@ function preview() {
   console.log("test");
   editData.value.editSkill = props.skills;
   editData.value.check = props.skills;
+  router.push(`/skills/${props.skills.id}`);
 }
 </script>

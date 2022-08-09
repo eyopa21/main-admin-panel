@@ -22,7 +22,7 @@
       "
     >
       <div class="flex justify-between mb-2">
-        <div @click="editData.editSkill = ''">
+        <div @click="editData.editSkill = '', router.push('/skills')">
           <ArrowCircleLeftIcon class="h-8 w-8 text-black" />
         </div>
         <div class="flex flex-row space-x-2">

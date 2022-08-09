@@ -55,9 +55,9 @@
       </li>
     </ul>
 
-    <div v-if="searchValue">
+   
       {{ searchIcons }}
-    </div>
+   
   </div>
 </template>
 
