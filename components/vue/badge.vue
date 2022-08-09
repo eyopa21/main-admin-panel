@@ -2,9 +2,9 @@
   <div
     class="
       bg-light_bg
-      h-4
+      h-5
       p-1
-      w-full
+      min-w-full
       mb-4
       md:mb-0
       rounded-md
@@ -16,7 +16,7 @@
     <div class="focus:outline-none flex items-center truncate">
       <div class="h-1 w-1 rounded-full bg-gray-700 dark:bg-gray-400 mr-1"></div>
       <span class="text-xs text-gray-700 dark:text-gray-400 font-normal truncate"
-        >{{skill}}</span
+        >{{skill.skill_name}}</span
       >
     </div>
   </div>
@@ -25,7 +25,7 @@
 <script setup>
 const props = defineProps({
   skill: {
-    type: String,
+    type: Object,
     required: true
   }
 })

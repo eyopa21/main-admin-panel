@@ -16,21 +16,22 @@
     "
   >
     <div class="mb-8">
-      <div class="text-3xl md:text-5xl font-serif font-bold">
+      <div class="text-3xl md:text-5xl font-extrabold">
         Change your password here
       </div>
-      <div class="p-4  font-serif text-red-500 ">
+      <div class="p-4  text-red-500 ">
         Your new password must be different from your previous one
       </div>
     </div>
-    <form @click.prevent="change()">
+    <hr>
+    <form class="p-0 sm:p-8 md:p-0 lg:p-8" @click.prevent="change()">
       <div class="flex flex-col">
         <VueInput
           label="Old Password"
           placeholder="Old password"
           type="text"
           name="Old_password"
-          rule="required"
+          rule="password"
           classs="w-full h-12"
           :astrix="true"
         />

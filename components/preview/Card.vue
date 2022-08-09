@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto  mb-3">
+  <div class="mx-auto  mb-3" v-if="layoutState.previewData">
     <div
       class="
         bg-bg_color
@@ -10,10 +10,10 @@
       "
     >
       <div class="flex flex-row">
-        <img class="rounded-t-lg px-5 py-2 h-64 w-3/4" :src="url" alt="image" />
+        <img class="rounded-t-lg px-5 py-2 h-64 w-3/4" :src="layoutState.previewData.image" alt="image" />
         <div class="flex flex-col mt-2 space-y-0 md:space-y-2 pr-2">
           <div class="text-white">Skills used</div>
-          <div v-for="skill in layoutState.previewData.skills" :key="skill">
+          <div v-for="skill in layoutState.previewData.data.skills" :key="skill">
             <VueBadge :skill="skill" />
           </div>
         </div>
@@ -30,15 +30,16 @@
             dark:text-white
           "
         >
-         {{ layoutState.previewData.title}}
+         {{ layoutState.previewData.data.title}}
+         
         </h5>
 
         <div class="text-xs font-bold text-white mt-1 mb-2">
-           {{ layoutState.previewData.subtitle}}
+           {{ layoutState.previewData.data.subtitle}}
         </div>
         
         <p class="mb-3 font-normal h-full  text-secondary dark:text-gray-400">
-          {{ layoutState.previewData.description}}
+          {{ layoutState.previewData.data.description}}
         </p>
        
       </div>
@@ -47,12 +48,14 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 
 const layoutState = useLayout();
 
 
 const url = ref("");
+
+
 
 
 </script>

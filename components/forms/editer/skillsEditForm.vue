@@ -196,10 +196,7 @@ const deleteSkill = (id) => {
   }
 };
 
-const test = () => {
-  disable.value = false;
-  console.log("test");
-};
+
 
 const getDisable = computed(() => {
   if (

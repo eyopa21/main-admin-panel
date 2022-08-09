@@ -80,7 +80,7 @@
               v-if="showAddForm && !editData.editProject"
               @closeAddForm="showAddForm = false"
             />
-            <NuxtPage v-if="editData.editProject" />
+            <NuxtPage  />
             <!--FormsEditerProjectsEditForm v-if="editData.editProject" /-->
           </div>
         </div>
@@ -94,7 +94,7 @@
   </div>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { ChevronUpIcon } from "@heroicons/vue/outline";
 import { ChevronDownIcon } from "@heroicons/vue/outline";
 import { GET_PROJECTS } from "~~/gql/projects/getProjects";
@@ -104,6 +104,10 @@ import { SORT_PROJECTS_ASC } from "~~/gql/projects/sortProjectsAsc";
 const showAddForm = ref(false);
 const editData = useEditData();
 const loader = ref(false);
+onMounted(() => {
+  console.log("mount")
+})
+
 
 const test = computed(() => {
   if (editData.value.editProject && showAddForm.value) {

@@ -5,12 +5,9 @@
         flex flex-col
         min-w-0
         break-words
-        sm:p-8
-        md:p-0
-        lg:p-8
         bg-white
         w-full
-        rounded-xl
+        md:rounded-xl
         mb-6
         shadow-lg
         min-h-screen
@@ -20,7 +17,14 @@
       <form @submit.prevent="update()">
         <div class="m-8">
           <div class="max-w-2xl mx-auto">
-            <div class="flex flex-col-reverse md:flex-row">
+            <div
+              class="
+                flex flex-col-reverse
+                sm:flex-row
+                md:flex-col-reverse
+                lg:flex-row
+              "
+            >
               <div class="flex items-center space-x-4">
                 <div @click="selectImage()" class="relative z-0">
                   <img
@@ -53,6 +57,7 @@
                       rounded-full
                       ml-8
                       md:ml-20
+                      lg:ml-20
                     "
                     ><CameraIcon class="w-8 h-8 text-bg_color"
                   /></span>
@@ -60,13 +65,16 @@
               </div>
               <div
                 class="
-                  md:m-auto
+                  lg:m-auto
                   pl-2
-                  text-xl
+                  text-md
+                  sm:text-2xl
                   md:text-2xl
+                  lg:text-xl
                   text-emerald-500
                   font-bold
                   uppercase
+                  mb-2
                 "
               >
                 Edit your personal information here
@@ -83,6 +91,7 @@
               classs="w-full h-12"
               class="w-1/2"
               :data="data.name"
+              @emit-input="(n) => (compareData.name = n)"
               label="Full Name"
               :astrix="true"
             />
@@ -94,6 +103,7 @@
               classs="w-full h-12"
               class="w-1/2"
               :data="data.logo"
+              @emit-input="(n) => (compareData.logo = n)"
               label="Logo Name"
               :astrix="true"
             />
@@ -105,12 +115,18 @@
             rule="required"
             classs="w-full h-12"
             :data="data.location"
+            @emit-input="(n) => (compareData.location = n)"
             label="Location"
             :astrix="true"
           />
         </div>
         <div class="m-8">
-          <VueBtn name="Update" type="submit" :loader="load" />
+          <VueBtn
+            name="Update"
+            type="submit"
+            :loader="load"
+            :disable="getDisable"
+          />
         </div>
       </form>
     </div>
@@ -130,6 +146,11 @@ const base64 = ref("");
 const load = ref(false);
 const image = ref();
 const data = ref("");
+const compareData = ref({
+  name: "",
+  logo: "",
+  location: "",
+});
 const url = ref("");
 const layoutState = useLayout();
 const { mutate: store_image } = useMutation(STORE_IMAGE);
@@ -203,7 +224,7 @@ const selectImage = () => {
     reader.readAsDataURL(image.value);
     reader.onload = function () {
       base64.value = reader.result.split(",")[1];
-      console.log("base", base64.value);
+      //console.log("base", base64.value);
     };
   };
 };
@@ -215,6 +236,22 @@ watchEffect(() => {
     data.value = result.value.user[0];
   } else if (error.value) {
     console.log("error.value", error.value);
+  }
+});
+const getDisable = computed(() => {
+  if (result.value) {
+    if (
+      compareData.value.logo == data.value.logo &&
+      compareData.value.name == data.value.name &&
+      compareData.value.location == data.value.location &&
+      !image.value
+    ) {
+      console.log("change something");
+      return true;
+    } else {
+      console.log("good");
+      return false;
+    }
   }
 });
 </script>

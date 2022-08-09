@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="editData.editProject">
     <div
       class="
         flex flex-col
@@ -20,7 +20,7 @@
       "
     >
       <div class="flex justify-between mb-2">
-        <div @click="editData.editProject = ''">
+        <div @click="editData.editProject = '',router.push('/projects')">
           <ArrowCircleLeftIcon class="h-8 w-8 text-black" />
         </div>
         <div class="flex flex-row space-x-2">
@@ -72,7 +72,7 @@
               :key="skill"
               class="p-0"
             >
-              <VueBadge :skill="skill.skill.skill_name" />
+              <VueBadge :skill="skill.skill" />
             </div>
           </div>
         </div>
@@ -180,6 +180,7 @@
   </div>
 </template>
 <script setup>
+import {onUnmounted} from 'vue'
 import { ArrowCircleLeftIcon } from "@heroicons/vue/outline";
 import { useForm } from "vee-validate";
 import { useRouter } from "vue-router";
@@ -191,12 +192,20 @@ import { UPDATE_SKILL_PROJECT } from "~~/gql/projects/updateProjectSkill";
 import { DELETE_PROJECTS } from "~~/gql/projects/deleteProject";
 import { DELETE_PROJECT_SKILL } from "~~/gql/projects/deleteProjectSkill";
 
+const props = defineProps(['project'])
+console.log("proooo", props.project)
 const { handleSubmit } = useForm();
 const layoutState = useLayout();
 const router = useRouter();
 const showForm = ref(false);
 const editData = useEditData();
+//editData.value = props.project
 const load = ref(false);
+
+onUnmounted(() => {
+//console.log("unmounted");
+//editData.value.editProject = ''
+})
 
 const base64 = ref("");
 const editForm = ref({
@@ -324,12 +333,16 @@ const update = handleSubmit((formValues) => {
   }
 });
 
+    const url = ref(editData.value.editProject.pricture);
 const preview = () => {
-  layoutState.value.previewData = editForm.value;
+    const temp = ref({
+        image: url.value,
+        data: editForm.value
+    })
+  layoutState.value.previewData = temp.value;
 };
 
 const image = ref();
-const url = ref(editData.value.editProject.pricture);
 
 const selectImage = () => {
   var input = document.createElement("input");
